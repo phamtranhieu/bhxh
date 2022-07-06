@@ -1,0 +1,10 @@
+.list {
+	// visibility: hidden;
+	display: none;
+}
+
+.button-down:hover ul {
+	display: block;
+	// visibility: visible;
+	// cursor: pointer;
+}

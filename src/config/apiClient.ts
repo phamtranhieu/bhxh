@@ -21,9 +21,8 @@ apiClient.interceptors.request.use(function (config: any) {
 	const accessToken = getAccessToken();
 	if (accessToken) {
 		config.headers.Authorization = 'Bearer ' + accessToken;
-		config.headers[keyHeaderCheckAuth] = 0;
+		// config.headers[keyHeaderCheckAuth] = 0;
 	}
-
 	return config;
 });
 apiClient.interceptors.response.use(
