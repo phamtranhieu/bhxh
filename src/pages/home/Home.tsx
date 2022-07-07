@@ -1,16 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { typeUser } from '../../interface/auth/auth.interface';
-import {
-	DesktopOutlined,
-	FileOutlined,
-	LaptopOutlined,
-	NotificationOutlined,
-	UserOutlined,
-	BellOutlined,
-	DownOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+
 import { Breadcrumb, Layout, Menu, message } from 'antd';
 import { data } from './dataHome';
 import { typeDataSlider, typeDataSliderChild } from '../../interface/auth/auth.interface';
@@ -20,25 +11,80 @@ import { deleteAccessToken, deleteUserAndPasswordLocal } from '../../helper/toke
 import { configApp } from '../../config/config';
 import { userLogout } from '../../service/auth/AuthService';
 
+import {
+	AppstoreOutlined,
+	MailOutlined,
+	SettingOutlined,
+	UserOutlined,
+	DownOutlined,
+	BellOutlined,
+} from '@ant-design/icons';
+import type { MenuProps, MenuTheme } from 'antd';
+
 const { Header, Content, Footer, Sider } = Layout;
 
-const dataSlider = data.map((item: any, index: number) => {
-	return {
-		key: index,
-		label: item.title,
-		children: item.dataChild?.map((item: typeDataSliderChild, indexChild: number) => {
-			return {
-				key: indexChild,
-				label: item.titleChild,
-			};
-		}),
-	};
-});
-
 export default function Home() {
+	type MenuItem = Required<MenuProps>['items'][number];
 	const uuid = require('react-uuid');
 	const { Header, Sider, Content } = Layout;
 	const navigate = useNavigate();
+
+	function getItem(
+		label: React.ReactNode,
+		key?: React.Key | null,
+		icon?: React.ReactNode,
+		children?: MenuItem[],
+		type?: 'group',
+	): MenuItem {
+		return {
+			key,
+			icon,
+			children,
+			label,
+			type,
+		} as MenuItem;
+	}
+
+	// const dataSlider = data.map((item: any, index: number) => {
+	// 	return {
+	// 		key: index,
+	// 		label: item.title,
+	// 		children: item.dataChild?.map((item: typeDataSliderChild, indexChild: number) => {
+	// 			return {
+	// 				key: indexChild,
+	// 				label: item.titleChild,
+	// 				// onclick: navigate(item.click),
+	// 			};
+	// 		}),
+	// 	};
+	// });
+
+	const items: MenuItem[] = [
+		getItem('QUẢN LÝ TÀI KHOẢN', 'sub1', <MailOutlined />, [
+			getItem('Tài khoản người dùng', '/home/control-staff'),
+			getItem('Nhóm người dùng', ''),
+		]),
+
+		getItem('QUẢN LÝ DỮ LIỆU NGUỒN', 'sub2', <AppstoreOutlined />, [
+			// getItem('Option 5', '5'),
+			// getItem('Option 6', '6'),
+			// getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
+		]),
+
+		getItem('QUẢN LÝ MÁY MÓC THIẾT BỊ', 'sub3', <SettingOutlined />, [
+			// getItem('Option 9', '9'),
+			// getItem('Option 10', '10'),
+			// getItem('Option 11', '11'),
+			// getItem('Option 12', '12'),
+		]),
+		getItem('QUẢN LÝ NGHIỆP VỤ', 'sub4', <SettingOutlined />, [
+			// getItem('Option 9', '9'),
+			// getItem('Option 10', '10'),
+			// getItem('Option 11', '11'),
+			// getItem('Option 12', '12'),
+		]),
+	];
+
 	const handleLogout = () => {
 		const accessToken = localStorage.getItem(configApp.tokenKey);
 		userLogout(accessToken!)
@@ -56,6 +102,10 @@ export default function Home() {
 	};
 	const handleChangePass = () => {
 		navigate('/home/change-password');
+	};
+	const onClick: MenuProps['onClick'] = e => {
+		console.log('click', e.key);
+		navigate(e.key);
 	};
 	return (
 		// <div>
@@ -100,7 +150,8 @@ export default function Home() {
 						// defaultSelectedKeys={['1']}
 						// defaultOpenKeys={['QUẢN LÝ TÀI KH']}
 						style={{ height: '100%', borderRight: 0 }}
-						items={dataSlider}
+						items={items}
+						onClick={onClick}
 					/>
 				</Sider>
 				<Layout style={{ padding: '0 24px 24px', backgroundColor: 'white', marginLeft: '5px' }}>

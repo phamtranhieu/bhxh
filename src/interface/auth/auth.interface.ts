@@ -24,6 +24,7 @@ export interface typeUser {
 export interface typeDataSliderChild {
 	id: number;
 	titleChild: string;
+	link: string;
 }
 export interface typeDataSlider {
 	id: number;
