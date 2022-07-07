@@ -20,12 +20,12 @@ export const getUserAndPassword = () => {
 		const localInfo = localStorage.getItem(userInfoKey);
 		const result = JSON.parse(localInfo!);
 		return {
-			email: result.email,
+			userName: result.userName,
 			password: result.password,
 		};
 	} catch (error) {
 		return {
-			email: '',
+			userName: '',
 			password: '',
 		};
 	}

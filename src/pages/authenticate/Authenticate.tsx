@@ -15,7 +15,7 @@ import { appAction } from '../../reducer/appReducer';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setAccessToken } from '../../helper/tokenHelper';
+import { setAccessToken, setUserAndPasswordLocal } from '../../helper/tokenHelper';
 import { authInterface } from '../../interface/auth/auth.interface';
 
 export default function Authenticate() {
@@ -37,19 +37,22 @@ export default function Authenticate() {
 			hasher: CryptoJS.algo.SHA512,
 		});
 		const realPass = CryptoJS.enc.Base64.stringify(resultPassword);
-		// setAppLoading(true);
+		const realParams = {
+			userName: values.userName,
+			password: values.password,
+		};
 		const params = {
 			userName: values.userName,
 			password: realPass,
 		};
 		setIsWrongPass(false);
 		setIsSpin(true);
-		userLogin(params)
+		userLogin(params, realParams)
 			.then(res => {
 				console.log(res);
 				dispatch(userAction.setUserLogin(res.data.data));
 				setAccessToken(res.data.data.accessToken);
-				// setAppLoading(false);
+				setUserAndPasswordLocal(realParams);
 				message.success('Đăng nhập thành công !');
 				navigate('/home');
 				setIsSpin(false);
@@ -63,7 +66,6 @@ export default function Authenticate() {
 				} else {
 					message.error('Đăng nhập thất bại!');
 				}
-				// setAppLoading(false);
 				setIsWrongPass(true);
 				setIsSpin(false);
 			});

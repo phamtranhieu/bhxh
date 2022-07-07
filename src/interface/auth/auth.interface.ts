@@ -30,3 +30,8 @@ export interface typeDataSlider {
 	title: number;
 	dataChild: [];
 }
+
+export interface typeChangePassword {
+	oldPassword: string;
+	password: string;
+}

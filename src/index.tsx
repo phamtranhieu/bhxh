@@ -10,6 +10,7 @@ import { store } from '../src/app/store';
 
 import Authenticate from './pages/authenticate/Authenticate';
 import Home from './pages/home/Home';
+import ChangePassword from './pages/change/ChangePassword';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -18,7 +19,9 @@ root.render(
 			<BrowserRouter>
 				<Routes>
 					<Route index element={<Authenticate />} />
-					<Route path="/home" element={<Home />} />
+					<Route path="/home" element={<Home />}>
+						<Route path="change-password" element={<ChangePassword />} />
+					</Route>
 				</Routes>
 			</BrowserRouter>
 		</Provider>
