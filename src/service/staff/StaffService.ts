@@ -3,10 +3,11 @@ import apiClient from '../../config/apiClient';
 export const inforStaff = async (params: any) => {
 	return await apiClient.get(`/employee/${params}`);
 };
-export const inforStaffAll = async (params: any) => {
+export const inforStaffAll = async () => {
 	return await apiClient.get(`/employee/get-all`);
 };
 export const inforStaffPagination = async (pages: number, pageSize: number) => {
+	console.log(`/employee/filter/${pages}/${pageSize}`);
 	return await apiClient.get(`/employee/filter/${pages}/${pageSize}`);
 };
 

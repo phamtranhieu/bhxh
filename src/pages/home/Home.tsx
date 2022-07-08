@@ -109,7 +109,7 @@ export default function Home() {
 	};
 	return (
 		// <div>
-		<Layout className="h-[100vh]">
+		<Layout className="">
 			<Header className="header flex items-center w-full justify-between h-[200px]">
 				<div className="flex items-center">
 					<UserOutlined style={{ color: 'white', marginRight: '20px' }} />
@@ -131,10 +131,16 @@ export default function Home() {
 								left: '-45px',
 							}}
 						>
-							<li style={{ color: 'black', textAlign: 'center' }} onClick={handleChangePass}>
+							<li
+								style={{ color: 'black', textAlign: 'center', height: '50px', lineHeight: '50px' }}
+								onClick={handleChangePass}
+							>
 								Đổi mật khẩu
 							</li>
-							<li style={{ color: 'black', textAlign: 'center' }} onClick={handleLogout}>
+							<li
+								style={{ color: 'black', textAlign: 'center', height: '50px', lineHeight: '50px' }}
+								onClick={handleLogout}
+							>
 								Đăng xuất
 							</li>
 						</ul>

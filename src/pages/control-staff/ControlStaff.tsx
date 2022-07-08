@@ -1,11 +1,25 @@
 import './ControlStaff.scss';
-import { Button, Input, Select } from 'antd';
+import { Button, Input, Select, Pagination, Modal, Form } from 'antd';
 const { Option } = Select;
+import type { PaginationProps } from 'antd';
 import { Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+	statusStaff,
+	creatStaff,
+	deleteStaff,
+	inforStaff,
+	inforStaffAll,
+	inforStaffPagination,
+	updateStaff,
+} from '../../service/staff/StaffService';
 
-const statusStaff = [
+import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+
+import ModalCreate from '../modal-create/ModalCreate';
+
+const statusStaffContent = [
 	{ status: 'Đang hoạt động', id: 1 },
 	{ status: 'Đã vô hiệu hóa', id: 2 },
 ];
@@ -13,18 +27,18 @@ const statusStaff = [
 interface DataType {
 	key: string;
 	name: string;
-	age: number;
-	address: string;
-	tags: string[];
+	staff: string;
+	email: string;
+	job: string;
+	active: boolean;
+	action: any;
 }
-
-useEffect(() => {});
 
 const columns: ColumnsType<DataType> = [
 	{
 		title: 'STT',
-		dataIndex: 'stt',
-		key: 'stt',
+		dataIndex: 'key',
+		key: 'key',
 		// render: text => <a>{text}</a>,
 	},
 	{
@@ -59,7 +73,8 @@ const columns: ColumnsType<DataType> = [
 	},
 	{
 		title: 'Vai trò người dùng',
-		key: 'action',
+		key: 'job',
+		dataIndex: 'job',
 		// render: (_, record) => (
 		// 	<Space size="middle">
 		// 		<a>Invite {record.name}</a>
@@ -69,7 +84,8 @@ const columns: ColumnsType<DataType> = [
 	},
 	{
 		title: 'Trạng thái',
-		key: 'action',
+		key: 'active',
+		dataIndex: 'active',
 		// render: (_, record) => (
 		// 	<Space size="middle">
 		// 		<a>Invite {record.name}</a>
@@ -80,71 +96,119 @@ const columns: ColumnsType<DataType> = [
 	{
 		title: 'Thao tác',
 		key: 'action',
-		// render: (_, record) => (
-		// 	<Space size="middle">
-		// 		<a>Invite {record.name}</a>
-		// 		<a>Delete</a>
-		// 	</Space>
-		// ),
-	},
-];
-
-const data: DataType[] = [
-	{
-		key: '1',
-		name: 'John Brown',
-		age: 32,
-		address: 'New York No. 1 Lake Park',
-		tags: ['nice', 'developer'],
-	},
-	{
-		key: '2',
-		name: 'Jim Green',
-		age: 42,
-		address: 'London No. 1 Lake Park',
-		tags: ['loser'],
-	},
-	{
-		key: '3',
-		name: 'Joe Black',
-		age: 32,
-		address: 'Sidney No. 1 Lake Park',
-		tags: ['cool', 'teacher'],
+		dataIndex: 'action',
+		render: (_, record) => (
+			<Space size="middle">
+				{/* <a>Invite {record.name}</a> */}
+				<EditOutlined />
+				<KeyOutlined />
+			</Space>
+		),
 	},
 ];
 
 export default function ControlStaff() {
+	const [numberPage, setNumberPage] = useState<number>(0);
+	const [sizePage, setSizePage] = useState<number>(6);
+	const [dataStaff, setDataStaff] = useState<any>([]);
+
+	const [isModalVisible, setIsModalVisible] = useState(false);
+
+	const showModal = () => {
+		setIsModalVisible(true);
+	};
+
+	const handleOk = () => {
+		setIsModalVisible(false);
+	};
+
+	const handleCancel = () => {
+		setIsModalVisible(false);
+	};
+
+	const data: DataType[] = dataStaff.map((item: any, index: number) => {
+		return {
+			key: index + 1,
+			name: item.department.name,
+			staff: item.name,
+			email: item.email ? item.email : 'null',
+			job: item.position.name,
+			active: item.isActive ? <LikeOutlined /> : <DislikeOutlined />,
+			action: '',
+		};
+	});
+
+	useEffect(() => {
+		inforStaffPagination(numberPage, sizePage)
+			.then(res => {
+				console.log(numberPage);
+				console.log(res);
+				setDataStaff(res.data.data.items);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	}, [numberPage, sizePage]);
+
+	const onChange: PaginationProps['onChange'] = (page, size) => {
+		console.log(page);
+		console.log(size);
+		setNumberPage(page - 1);
+		setSizePage(size);
+	};
+
+	const onFinish = (values: any) => {
+		console.log('Success:', values);
+	};
+
+	const onFinishFailed = (errorInfo: any) => {
+		console.log('Failed:', errorInfo);
+	};
 	return (
-		<div>
+		<>
 			<div>
-				<div className="flex justify-between">
-					<div>
-						<Input />
+				<div>
+					<div className="flex justify-between">
+						<div>
+							<Input />
+						</div>
+						<Button onClick={showModal}>Thêm mới</Button>
 					</div>
-					<Button>Thêm mới</Button>
+					<div className="flex">
+						<div className="mr-5">
+							<p>Trạng thái</p>
+							<Select defaultValue={'Tất cả'} className="w-[150px]">
+								{statusStaffContent.map((item, index) => {
+									return <Option key={index}>{item.status}</Option>;
+								})}
+							</Select>
+						</div>
+						<div>
+							<p>Vai trò của người dùng</p>
+							<Select defaultValue={'Tất cả'} className="w-[150px]">
+								{statusStaffContent.map((item, index) => {
+									return <Option key={index}>{item.status}</Option>;
+								})}
+							</Select>
+						</div>
+					</div>
 				</div>
-				<div className="flex">
-					<div className="mr-5">
-						<p>Trạng thái</p>
-						<Select defaultValue={'Tất cả'} className="w-[150px]">
-							{statusStaff.map((item, index) => {
-								return <Option key={index}>{item.status}</Option>;
-							})}
-						</Select>
-					</div>
-					<div>
-						<p>Vai trò của người dùng</p>
-						<Select defaultValue={'Tất cả'} className="w-[150px]">
-							{statusStaff.map((item, index) => {
-								return <Option key={index}>{item.status}</Option>;
-							})}
-						</Select>
-					</div>
+				<div className="mb-5">
+					<Table columns={columns} dataSource={data} pagination={false} />
+				</div>
+				<div>
+					<Pagination
+						showSizeChanger
+						onChange={onChange}
+						// onShowSizeChange={onShowSizeChange}
+						defaultCurrent={1}
+						total={500}
+						defaultPageSize={6}
+						style={{ display: 'flex', justifyContent: 'end' }}
+					/>
 				</div>
 			</div>
-			<div>
-				<Table columns={columns} dataSource={data} />;
-			</div>
-		</div>
+			<ModalCreate isModalVisible={isModalVisible} />
+		</>
 	);
 }
