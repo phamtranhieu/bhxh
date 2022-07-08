@@ -1,4 +1,4 @@
-import './ControlStaff.scss';
+import './ControlUser.scss';
 import { Button, Input, Select, Pagination, Modal, Form } from 'antd';
 const { Option } = Select;
 import type { PaginationProps } from 'antd';
@@ -6,14 +6,15 @@ import { Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import {
-	statusStaff,
-	creatStaff,
-	deleteStaff,
-	inforStaff,
-	inforStaffAll,
-	inforStaffPagination,
-	updateStaff,
-} from '../../service/staff/StaffService';
+	changeActivityUser,
+	creatUser,
+	deleteUser,
+	getAllUser,
+	inforUser,
+	inforUserPagination,
+	resetPasssUser,
+	updateUser,
+} from '../../service/user/UserService';
 
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 
@@ -129,19 +130,18 @@ export default function ControlStaff() {
 	const data: DataType[] = dataStaff.map((item: any, index: number) => {
 		return {
 			key: index + 1,
-			name: item.department.name,
-			staff: item.name,
+			name: item.username,
+			staff: item?.employee?.name || 'N/A',
 			email: item.email ? item.email : 'null',
-			job: item.position.name,
-			active: item.isActive ? <LikeOutlined /> : <DislikeOutlined />,
+			job: item.userGroup.name,
+			active: item.status.value == 'Active' ? <LikeOutlined /> : <DislikeOutlined />,
 			action: '',
 		};
 	});
 
 	useEffect(() => {
-		inforStaffPagination(numberPage, sizePage)
+		inforUserPagination(numberPage, sizePage)
 			.then(res => {
-				console.log(numberPage);
 				console.log(res);
 				setDataStaff(res.data.data.items);
 			})
@@ -208,7 +208,7 @@ export default function ControlStaff() {
 					/>
 				</div>
 			</div>
-			<ModalCreate isModalVisible={isModalVisible} />
+			<ModalCreate isModalVisible={isModalVisible} handleCancel={handleCancel} handleOk={handleOk} />
 		</>
 	);
 }

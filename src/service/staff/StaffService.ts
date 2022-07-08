@@ -7,7 +7,6 @@ export const inforStaffAll = async () => {
 	return await apiClient.get(`/employee/get-all`);
 };
 export const inforStaffPagination = async (pages: number, pageSize: number) => {
-	console.log(`/employee/filter/${pages}/${pageSize}`);
 	return await apiClient.get(`/employee/filter/${pages}/${pageSize}`);
 };
 
