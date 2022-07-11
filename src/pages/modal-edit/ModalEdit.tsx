@@ -1,4 +1,4 @@
-import './ModalCreate';
+import './ModalEdit';
 import { Button, Input, Select, Pagination, Modal, Form, message } from 'antd';
 const { Option } = Select;
 import type { PaginationProps } from 'antd';
@@ -18,14 +18,14 @@ import {
 
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 
-export default function ModalCreate(props: any) {
-	const [formModalCreate] = Form.useForm();
-	const { isModalVisible, handleCancel, handleOk } = props;
+export default function ModalEdit(props: any) {
+	const [formModalEdit] = Form.useForm();
+	const { isModalVisibleEdit, handleCancelEdit, handleOkEdit, userName } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
-
+	console.log(dataUserAll);
 	const onFinish = (values: any) => {
 		console.log(values);
-		const numberStaff = values.staff;
+		const numberStaffEdit = values.staffEdit;
 		const data = dataUserAll
 			.filter((item: any) => {
 				return item.status.displayText === 'Đang hoạt động';
@@ -35,39 +35,43 @@ export default function ModalCreate(props: any) {
 					return item;
 				}
 			});
-		const employeeID = data.find((item, index) => {
-			if (numberStaff == index) {
+		const IDEdit = data.find((item, index) => {
+			if (numberStaffEdit == index) {
+				return item;
+			}
+		}).id;
+		const employeeIDEdit = data.find((item, index) => {
+			if (numberStaffEdit == index) {
 				return item;
 			}
 		}).employee.id;
-		console.log(employeeID);
-		const userGroupID = data.find((item, index) => {
-			if (numberStaff == index) {
+		const userGroupIDEdit = data.find((item, index) => {
+			if (numberStaffEdit == index) {
 				return item;
 			}
 		}).userGroup.id;
+		console.log(data);
 
 		const params = {
-			username: values.username,
-			password: values.password,
+			id: IDEdit,
 			email: values.email,
-			employeeId: employeeID,
-			userGroupId: userGroupID,
+			employeeId: employeeIDEdit,
+			userGroupId: userGroupIDEdit,
 		};
-		console.log(params);
-		// creatUser(params)
-		// 	.then(res => {
-		// 		console.log(res);
-		// 		message.success('Tạo mới tài khoản người dùng thành công');
-		// 	})
-		// 	.catch(err => {
-		// 		console.log(err);
-		// 		if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-		// 			message.error('Nhân viên đã có tài khoản');
-		// 		} else {
-		// 			message.error('Tạo mới tài khoản người dùng thất bại');
-		// 		}
-		// 	});
+		updateUser(params)
+			.then(res => {
+				console.log(res);
+				message.success('Cập nhật tài khoản người dùng thành công');
+			})
+			.catch(err => {
+				console.log(err);
+				message.error('Cập nhật tài khoản người dùng thất bại');
+				// if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
+				// 	message.error('Nhân viên đã có tài khoản');
+				// } else {
+				// 	message.error('Tạo mới tài khoản người dùng thất bại');
+				// }
+			});
 	};
 
 	const onFinishFailed = (errorInfo: any) => {
@@ -76,17 +80,19 @@ export default function ModalCreate(props: any) {
 	const arrayValue = dataUserAll.map((item: any, index) => {
 		return item.userGroup.name;
 	});
-
-	if (!isModalVisible) {
-		formModalCreate.setFieldsValue({
-			staff: '',
-			username: '',
+	if (!isModalVisibleEdit) {
+		formModalEdit.setFieldsValue({
+			staffEdit: '',
+			usernameEdit: '',
 			email: '',
-			password: '',
-			rePassword: '',
 			action: '',
 		});
 	}
+	// else {
+	// 	formModalEdit.setFieldsValue({
+	// 		username: userName,
+	// 	});
+	// }
 
 	useEffect(() => {
 		getAllUser()
@@ -98,18 +104,19 @@ export default function ModalCreate(props: any) {
 				console.log(err);
 			});
 	}, []);
+	console.log(userName);
 
 	return (
 		<Modal
-			visible={isModalVisible}
+			visible={isModalVisibleEdit}
 			//  onOk={handleOk}
-			onCancel={handleCancel}
+			onCancel={handleCancelEdit}
 			footer={null}
 		>
-			<h1>TẠO MỚI TÀI KHOẢN NGƯỜI DÙNG</h1>
+			<h1>CẬP NHẬT TÀI KHOẢN NGƯỜI DÙNG</h1>
 			<Form
-				form={formModalCreate}
-				name="formModalCreate"
+				form={formModalEdit}
+				name="formModalEdit"
 				labelCol={{ span: 8 }}
 				wrapperCol={{ span: 16 }}
 				initialValues={{ remember: true }}
@@ -119,7 +126,7 @@ export default function ModalCreate(props: any) {
 			>
 				<Form.Item
 					label={<label className="font-semibold text-[16px]">Nhân viên</label>}
-					name="staff"
+					name="staffEdit"
 					rules={[{ required: true, message: 'Vui lòng chọn nhân viên!' }]}
 				>
 					<Select>
@@ -129,8 +136,6 @@ export default function ModalCreate(props: any) {
 							})
 							.map((item: any, index: number) => {
 								if (item.employee!) {
-									// setEmployeeId(item.employee.id);
-									// setUserGroupId(item.userGroup.id);
 									return (
 										<Option key={index}>
 											{item?.employee?.no}-{item?.employee?.name}
@@ -143,27 +148,28 @@ export default function ModalCreate(props: any) {
 
 				<Form.Item
 					label={<label className="font-semibold text-[16px]">Tên đăng nhập</label>}
-					name="username"
-					rules={[
-						{
-							validator(rule, value) {
-								const check = /^[a-zA-Z0-9]+$/;
-								// check if no store selected
-								// const storeOther = productsFormValue[index]?.store_other;
-								if (value == '' || value == undefined || value == null) {
-									return Promise.reject(new Error('Vui lòng nhập tên đăng nhập!'));
-								} else if (!check.test(value)) {
-									return Promise.reject(
-										new Error('Chỉ được phép nhập chữ và số, không nhập ký tự đặc biệt!'),
-									);
-								} else {
-									return Promise.resolve();
-								}
-							},
-						},
-					]}
+					name="usernameEdit"
+					initialValue={userName}
+					// rules={[
+					// 	{
+					// 		validator(rule, value) {
+					// 			const check = /^[a-zA-Z0-9]+$/;
+					// 			// check if no store selected
+					// 			// const storeOther = productsFormValue[index]?.store_other;
+					// 			if (value == '' || value == undefined || value == null) {
+					// 				return Promise.reject(new Error('Vui lòng nhập tên đăng nhập!'));
+					// 			} else if (!check.test(value)) {
+					// 				return Promise.reject(
+					// 					new Error('Chỉ được phép nhập chữ và số, không nhập ký tự đặc biệt!'),
+					// 				);
+					// 			} else {
+					// 				return Promise.resolve();
+					// 			}
+					// 		},
+					// 	},
+					// ]}
 				>
-					<Input />
+					<Input placeholder={userName} disabled />
 				</Form.Item>
 				<Form.Item
 					label={<label className="font-semibold text-[16px]">Email</label>}
@@ -187,49 +193,6 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Mật khẩu</label>}
-					name="password"
-					rules={[
-						{
-							validator(rule, value) {
-								const lengthValue = value.length;
-								if (value == '' || value == undefined || value == null) {
-									return Promise.reject(new Error('Vui lòng nhập mật khẩu!'));
-								} else if (lengthValue < 8) {
-									return Promise.reject(
-										new Error('Mật khẩu tối thiểu 8 ký tự, vui lòng kiểm tra lại'),
-									);
-								} else {
-									return Promise.resolve();
-								}
-							},
-						},
-					]}
-				>
-					<Input.Password />
-				</Form.Item>
-				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhập lại mật khẩu</label>}
-					name="rePassword"
-					rules={[
-						{
-							validator(rule, value) {
-								const getPass = formModalCreate.getFieldValue('password');
-								if (value == '' || value == undefined || value == null) {
-									return Promise.reject(new Error('Vui lòng xác nhận mật khẩu!'));
-								} else if (value != getPass) {
-									return Promise.reject(new Error('Mật khẩu không khớp vui lòng kiểm tra lại'));
-								} else {
-									return Promise.resolve();
-								}
-							},
-						},
-					]}
-				>
-					<Input.Password />
-				</Form.Item>
-
-				<Form.Item
 					label={<label className="font-semibold text-[16px]">Vai trò của người dùng</label>}
 					name="action"
 					rules={[{ required: true, message: 'Chọn vai trò của người dùng!' }]}
@@ -249,7 +212,7 @@ export default function ModalCreate(props: any) {
 						danger
 						type="primary"
 						htmlType="submit"
-						onClick={handleCancel}
+						onClick={handleCancelEdit}
 						style={{ marginRight: '10px', marginTop: '20px' }}
 					>
 						Hủy thao tác

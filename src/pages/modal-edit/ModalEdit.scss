@@ -1,4 +1,4 @@
-import './ModalCreate';
+import './ModalEdit';
 import { Button, Input, Select, Pagination, Modal, Form, message } from 'antd';
 const { Option } = Select;
 import type { PaginationProps } from 'antd';
@@ -18,13 +18,12 @@ import {
 
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 
-export default function ModalCreate(props: any) {
+export default function ModalEdit(props: any) {
 	const [formModalCreate] = Form.useForm();
 	const { isModalVisible, handleCancel, handleOk } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
-
+	console.log(isModalVisible);
 	const onFinish = (values: any) => {
-		console.log(values);
 		const numberStaff = values.staff;
 		const data = dataUserAll
 			.filter((item: any) => {
@@ -40,7 +39,6 @@ export default function ModalCreate(props: any) {
 				return item;
 			}
 		}).employee.id;
-		console.log(employeeID);
 		const userGroupID = data.find((item, index) => {
 			if (numberStaff == index) {
 				return item;
@@ -55,19 +53,19 @@ export default function ModalCreate(props: any) {
 			userGroupId: userGroupID,
 		};
 		console.log(params);
-		// creatUser(params)
-		// 	.then(res => {
-		// 		console.log(res);
-		// 		message.success('Tạo mới tài khoản người dùng thành công');
-		// 	})
-		// 	.catch(err => {
-		// 		console.log(err);
-		// 		if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-		// 			message.error('Nhân viên đã có tài khoản');
-		// 		} else {
-		// 			message.error('Tạo mới tài khoản người dùng thất bại');
-		// 		}
-		// 	});
+		creatUser(params)
+			.then(res => {
+				console.log(res);
+				message.success('Tạo mới tài khoản người dùng thành công');
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
+					message.error('Nhân viên đã có tài khoản');
+				} else {
+					message.error('Tạo mới tài khoản người dùng thất bại');
+				}
+			});
 	};
 
 	const onFinishFailed = (errorInfo: any) => {
@@ -76,7 +74,6 @@ export default function ModalCreate(props: any) {
 	const arrayValue = dataUserAll.map((item: any, index) => {
 		return item.userGroup.name;
 	});
-
 	if (!isModalVisible) {
 		formModalCreate.setFieldsValue({
 			staff: '',
