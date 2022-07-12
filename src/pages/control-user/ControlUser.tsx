@@ -1,10 +1,10 @@
 import './ControlUser.scss';
-import { Button, Input, Select, Pagination, Modal, Form } from 'antd';
+import { Button, Input, Select, Pagination, Modal, Form, Switch } from 'antd';
 const { Option } = Select;
 import type { PaginationProps } from 'antd';
 import { Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
 	changeActivityUser,
 	creatUser,
@@ -17,14 +17,15 @@ import {
 } from '../../service/user/UserService';
 
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
-
+import { useSearchParams } from 'react-router-dom';
 import ModalCreate from '../modal-create/ModalCreate';
 import ModalEdit from '../modal-edit/ModalEdit';
 import ModalReset from '../modal-reset/ModalReset';
+import ModalConfirm from '../modal-confirm/ModalConfirm';
 
 const statusStaffContent = [
-	{ status: 'Đang hoạt động', id: 1 },
-	{ status: 'Đã vô hiệu hóa', id: 2 },
+	{ status: 'Đang hoạt động', id: 1, value: 'Active' },
+	{ status: 'Đã vô hiệu hóa', id: 2, value: 'Inactive' },
 ];
 
 interface DataType {
@@ -43,7 +44,6 @@ export default function ControlStaff() {
 			title: 'STT',
 			dataIndex: 'key',
 			key: 'key',
-			// render: text => <a>{text}</a>,
 		},
 		{
 			title: 'Tên đăng nhập',
@@ -59,43 +59,16 @@ export default function ControlStaff() {
 			title: 'Email',
 			key: 'email',
 			dataIndex: 'email',
-			// render: (_, { tags }) => (
-			// 	<>
-			// 		{tags.map(tag => {
-			// 			let color = tag.length > 5 ? 'geekblue' : 'green';
-			// 			if (tag === 'loser') {
-			// 				color = 'volcano';
-			// 			}
-			// 			return (
-			// 				<Tag color={color} key={tag}>
-			// 					{tag.toUpperCase()}
-			// 				</Tag>
-			// 			);
-			// 		})}
-			// 	</>
-			// ),
 		},
 		{
 			title: 'Vai trò người dùng',
 			key: 'job',
 			dataIndex: 'job',
-			// render: (_, record) => (
-			// 	<Space size="middle">
-			// 		<a>Invite {record.name}</a>
-			// 		<a>Delete</a>
-			// 	</Space>
-			// ),
 		},
 		{
 			title: 'Trạng thái',
 			key: 'active',
 			dataIndex: 'active',
-			// render: (_, record) => (
-			// 	<Space size="middle">
-			// 		<a>Invite {record.name}</a>
-			// 		<a>Delete</a>
-			// 	</Space>
-			// ),
 		},
 		{
 			title: 'Thao tác',
@@ -103,7 +76,6 @@ export default function ControlStaff() {
 			dataIndex: 'action',
 			render: (_, record) => (
 				<Space size="middle">
-					{/* <a>Invite {record.name}</a> */}
 					<EditOutlined
 						onClick={() => {
 							handleClickEdit(record);
@@ -118,35 +90,34 @@ export default function ControlStaff() {
 			),
 		},
 	];
-	const handleClickReset = (params: any) => {
-		showModalReset();
-		console.log(params);
-		const idUser = dataUser.find((item: any, index: number) => {
-			if (index == params.key - 1) {
-				return item;
-			}
-		}).id;
-		console.log(idUser);
-		setIdUserUse(idUser);
-	};
-	const handleClickEdit = (params: any) => {
-		console.log(params);
-		setUserName(params.name);
-		showModalEdit();
-		// dataUser.filter((item: any, index: any) => {
-		// 	if (params.key - 1 == index) {
-		// 		console.log(item);
-		// 		return item;
-		// 	}
-		// });
-	};
+	const [sortActive, setSortActive] = useState('');
+	const [searchParams, setSearchParams] = useSearchParams();
 	const [userName, setUserName] = useState('');
 	const [numberPage, setNumberPage] = useState<number>(0);
 	const [sizePage, setSizePage] = useState<number>(6);
 	const [dataUser, setDataUser] = useState<any>([]);
 	const [idUserUse, setIdUserUse] = useState('');
-	// modal create
+	const [idUserUseConfirm, setIdUserUseConfirm] = useState('');
+	const [filterSearch, setFilterSearch] = useState<string>('');
+	const typingTimeoutRef = useRef(null);
 	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [statusUser, setStatusUser] = useState('');
+	const handleClickReset = (params: any) => {
+		showModalReset();
+		const idUser = dataUser.find((item: any, index: number) => {
+			if (index == params.key - 1) {
+				return item;
+			}
+		}).id;
+		setIdUserUse(idUser);
+	};
+
+	const handleClickEdit = (params: any) => {
+		setUserName(params.name);
+		showModalEdit();
+	};
+
+	// modal create
 
 	const showModal = () => {
 		setIsModalVisible(true);
@@ -177,7 +148,6 @@ export default function ControlStaff() {
 
 	// modal reset
 	const [isModalVisibleReset, setIsModalVisibleReset] = useState(false);
-	console.log(isModalVisibleReset);
 	const showModalReset = () => {
 		setIsModalVisibleReset(true);
 	};
@@ -189,6 +159,25 @@ export default function ControlStaff() {
 	const handleCancelReset = () => {
 		setIsModalVisibleReset(false);
 	};
+	// modal confirm status
+	const [isModalVisibleConfirm, setIsModalVisibleConfirm] = useState(false);
+	const showModalConfirm = () => {
+		setIsModalVisibleConfirm(true);
+	};
+
+	const handleOkConfirm = () => {
+		setIsModalVisibleConfirm(false);
+	};
+
+	const handleCancelConfirm = () => {
+		setIsModalVisibleConfirm(false);
+	};
+
+	const handleConfirm = (params: any, idparams: any) => {
+		setStatusUser(params);
+		showModalConfirm();
+		setIdUserUseConfirm(idparams);
+	};
 
 	const data: DataType[] = dataUser.map((item: any, index: number) => {
 		return {
@@ -197,13 +186,28 @@ export default function ControlStaff() {
 			staff: item?.employee?.name || 'N/A',
 			email: item.email ? item.email : 'null',
 			job: item.userGroup.name,
-			active: item.status.value == 'Active' ? <LikeOutlined /> : <DislikeOutlined />,
+			active:
+				item.status.value == 'Active' ? (
+					<Switch
+						checked
+						onClick={() => {
+							handleConfirm(item.status.value, item.id);
+						}}
+					/>
+				) : (
+					<Switch
+						checked={false}
+						onClick={() => {
+							handleConfirm(item.status.value, item.id);
+						}}
+					/>
+				),
 			action: '',
 		};
 	});
 
 	useEffect(() => {
-		inforUserPagination(numberPage, sizePage)
+		inforUserPagination(numberPage, sizePage, filterSearch, sortActive)
 			.then(res => {
 				console.log(res);
 				setDataUser(res.data.data.items);
@@ -211,59 +215,102 @@ export default function ControlStaff() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, [numberPage, sizePage]);
-
-	// useEffect(() => {
-	// 	getAllUser()
-	// 		.then(res => {
-	// 			console.log(res);
-	// 			setAllUser(res.data.data);
-	// 		})
-	// 		.catch(err => {
-	// 			console.log(err);
-	// 		});
-	// }, []);
+	}, [numberPage, sizePage, filterSearch, sortActive]);
 
 	const onChange: PaginationProps['onChange'] = (page, size) => {
 		setNumberPage(page - 1);
 		setSizePage(size);
+		setSearchParams({
+			...searchParams,
+			pageNumber: `${page}`,
+			pageSize: `${size}`,
+			searchKey: filterSearch,
+			status: sortActive,
+		});
 	};
 
-	const onFinish = (values: any) => {
-		console.log('Success:', values);
+	const handleChange = (e: any) => {
+		console.log(e.target.value);
+		if (typingTimeoutRef.current) {
+			clearTimeout(typingTimeoutRef.current);
+		} else {
+			setTimeout(() => {
+				setFilterSearch(e.target.value);
+			}, 300);
+		}
+		setSearchParams({
+			...searchParams,
+			pageNumber: `${numberPage + 1}`,
+			pageSize: `${sizePage}`,
+			searchKey: e.target.value,
+			status: sortActive,
+		});
 	};
-
-	const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo);
+	const handleChangeStatus = (e: any) => {
+		const valueStatus = statusStaffContent.find((item, index) => {
+			if (index == e) {
+				return item;
+			}
+		})?.value;
+		if (valueStatus != undefined) {
+			setSortActive(valueStatus);
+		}
 	};
 	return (
 		<>
 			<div>
 				<div>
-					<div className="flex justify-between">
-						<div>
-							<Input />
+					<Form
+						name="basic"
+						// labelCol={{ span: 8 }}
+						// wrapperCol={{ span: 16 }}
+						initialValues={{ remember: true }}
+						// onFinish={onFinishSearch}
+						// onFinishFailed={onFinishFailedSearch}
+						autoComplete="off"
+					>
+						<div className="flex justify-between">
+							<Form.Item
+								name="search"
+								// rules={[{ required: true, message: 'Please input your username!' }]}
+							>
+								<Input onChange={handleChange} />
+							</Form.Item>
+							<Button onClick={showModal}>Thêm mới</Button>
 						</div>
-						<Button onClick={showModal}>Thêm mới</Button>
-					</div>
-					<div className="flex">
-						<div className="mr-5">
-							<p>Trạng thái</p>
-							<Select defaultValue={'Tất cả'} className="w-[150px]">
-								{statusStaffContent.map((item, index) => {
-									return <Option key={index}>{item.status}</Option>;
-								})}
-							</Select>
+						<div className="flex">
+							<div className="mr-5">
+								<p>Trạng thái</p>
+								<Form.Item
+									name="status"
+									rules={[{ required: true, message: 'Please input your username!' }]}
+								>
+									<Select
+										defaultValue={'Tất cả'}
+										// value={statusStaffContent.map((item, index) => {
+										// 	return item.status;
+										// })}
+										className="w-[150px]"
+										onChange={e => {
+											handleChangeStatus(e);
+										}}
+									>
+										{statusStaffContent.map((item, index) => {
+											return <Option key={index}>{item.status}</Option>;
+										})}
+									</Select>
+								</Form.Item>
+							</div>
+							<div>
+								<p>Vai trò của người dùng</p>
+								<Select defaultValue={'Tất cả'} className="w-[150px]">
+									{statusStaffContent.map((item, index) => {
+										return <Option key={index}>{item.status}</Option>;
+									})}
+								</Select>
+							</div>
 						</div>
-						<div>
-							<p>Vai trò của người dùng</p>
-							<Select defaultValue={'Tất cả'} className="w-[150px]">
-								{statusStaffContent.map((item, index) => {
-									return <Option key={index}>{item.status}</Option>;
-								})}
-							</Select>
-						</div>
-					</div>
+					</Form>
 				</div>
 				<div className="mb-5">
 					<Table columns={columns} dataSource={data} pagination={false} />
@@ -294,6 +341,13 @@ export default function ControlStaff() {
 				handleOkReset={handleOkReset}
 				// userName={userName}
 				idUserUse={idUserUse}
+			/>
+			<ModalConfirm
+				isModalVisibleConfirm={isModalVisibleConfirm}
+				handleCancelConfirm={handleCancelConfirm}
+				handleOkConfirm={handleOkConfirm}
+				statusUser={statusUser}
+				idUserUseConfirm={idUserUseConfirm}
 			/>
 		</>
 	);

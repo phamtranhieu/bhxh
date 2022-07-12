@@ -4,8 +4,14 @@ export const inforUser = async (params: any) => {
 	return await apiClient.get(`/employee/${params}`);
 };
 
-export const inforUserPagination = async (pages: number, pageSize: number) => {
-	return await apiClient.get(`/user/filter/${pages}/${pageSize}`);
+export const inforUserPagination = async (
+	pages: number,
+	pageSize: number,
+	filterSearch: string,
+	sortActive: string,
+) => {
+	console.log(sortActive);
+	return await apiClient.get(`/user/filter/${pages}/${pageSize}?searchKey=${filterSearch}&status=${sortActive}`);
 };
 
 export const creatUser = async (params: any) => {
@@ -29,3 +35,4 @@ export const deleteUser = async (params: any) => {
 export const getAllUser = async () => {
 	return await apiClient.get(`/user/get-all`);
 };
+// const abc = 'Đang hoạt động';

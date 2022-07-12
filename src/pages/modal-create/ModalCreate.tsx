@@ -15,10 +15,12 @@ import {
 	resetPasssUser,
 	updateUser,
 } from '../../service/user/UserService';
+import { useNavigate } from 'react-router-dom';
 
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 
 export default function ModalCreate(props: any) {
+	const navigate = useNavigate();
 	const [formModalCreate] = Form.useForm();
 	const { isModalVisible, handleCancel, handleOk } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
@@ -55,19 +57,22 @@ export default function ModalCreate(props: any) {
 			userGroupId: userGroupID,
 		};
 		console.log(params);
-		// creatUser(params)
-		// 	.then(res => {
-		// 		console.log(res);
-		// 		message.success('Tạo mới tài khoản người dùng thành công');
-		// 	})
-		// 	.catch(err => {
-		// 		console.log(err);
-		// 		if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-		// 			message.error('Nhân viên đã có tài khoản');
-		// 		} else {
-		// 			message.error('Tạo mới tài khoản người dùng thất bại');
-		// 		}
-		// 	});
+		creatUser(params)
+			.then(res => {
+				console.log(res);
+				message.success('Tạo mới tài khoản người dùng thành công');
+				navigate('/home');
+			})
+			.catch(err => {
+				console.log(err);
+				if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
+					message.error('Nhân viên đã có tài khoản');
+				} else if (err.response.data.error.code == 'EMAIL_ALREADY_EXISTS') {
+					message.error('Email đã tồn tại');
+				} else {
+					message.error('Tạo mới tài khoản người dùng thất bại');
+				}
+			});
 	};
 
 	const onFinishFailed = (errorInfo: any) => {

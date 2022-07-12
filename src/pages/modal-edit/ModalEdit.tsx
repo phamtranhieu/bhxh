@@ -15,16 +15,16 @@ import {
 	resetPasssUser,
 	updateUser,
 } from '../../service/user/UserService';
-
+import { useNavigate } from 'react-router-dom';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 
 export default function ModalEdit(props: any) {
+	const navigate = useNavigate();
 	const [formModalEdit] = Form.useForm();
 	const { isModalVisibleEdit, handleCancelEdit, handleOkEdit, userName } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
-	console.log(dataUserAll);
+
 	const onFinish = (values: any) => {
-		console.log(values);
 		const numberStaffEdit = values.staffEdit;
 		const data = dataUserAll
 			.filter((item: any) => {
@@ -35,11 +35,13 @@ export default function ModalEdit(props: any) {
 					return item;
 				}
 			});
+
 		const IDEdit = data.find((item, index) => {
 			if (numberStaffEdit == index) {
 				return item;
 			}
 		}).id;
+
 		const employeeIDEdit = data.find((item, index) => {
 			if (numberStaffEdit == index) {
 				return item;
@@ -62,15 +64,11 @@ export default function ModalEdit(props: any) {
 			.then(res => {
 				console.log(res);
 				message.success('Cập nhật tài khoản người dùng thành công');
+				navigate('/home');
 			})
 			.catch(err => {
 				console.log(err);
 				message.error('Cập nhật tài khoản người dùng thất bại');
-				// if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-				// 	message.error('Nhân viên đã có tài khoản');
-				// } else {
-				// 	message.error('Tạo mới tài khoản người dùng thất bại');
-				// }
 			});
 	};
 
@@ -80,6 +78,7 @@ export default function ModalEdit(props: any) {
 	const arrayValue = dataUserAll.map((item: any, index) => {
 		return item.userGroup.name;
 	});
+
 	if (!isModalVisibleEdit) {
 		formModalEdit.setFieldsValue({
 			staffEdit: '',
@@ -88,11 +87,6 @@ export default function ModalEdit(props: any) {
 			action: '',
 		});
 	}
-	// else {
-	// 	formModalEdit.setFieldsValue({
-	// 		username: userName,
-	// 	});
-	// }
 
 	useEffect(() => {
 		getAllUser()
@@ -104,7 +98,6 @@ export default function ModalEdit(props: any) {
 				console.log(err);
 			});
 	}, []);
-	console.log(userName);
 
 	return (
 		<Modal
@@ -112,6 +105,7 @@ export default function ModalEdit(props: any) {
 			//  onOk={handleOk}
 			onCancel={handleCancelEdit}
 			footer={null}
+			centered
 		>
 			<h1>CẬP NHẬT TÀI KHOẢN NGƯỜI DÙNG</h1>
 			<Form
