@@ -260,20 +260,9 @@ export default function ControlStaff() {
 		<>
 			<div>
 				<div>
-					<Form
-						name="basic"
-						// labelCol={{ span: 8 }}
-						// wrapperCol={{ span: 16 }}
-						initialValues={{ remember: true }}
-						// onFinish={onFinishSearch}
-						// onFinishFailed={onFinishFailedSearch}
-						autoComplete="off"
-					>
+					<Form name="basic" initialValues={{ remember: true }} autoComplete="off">
 						<div className="flex justify-between">
-							<Form.Item
-								name="search"
-								// rules={[{ required: true, message: 'Please input your username!' }]}
-							>
+							<Form.Item name="search">
 								<Input onChange={handleChange} />
 							</Form.Item>
 							<Button onClick={showModal}>Thêm mới</Button>
@@ -287,9 +276,6 @@ export default function ControlStaff() {
 								>
 									<Select
 										defaultValue={'Tất cả'}
-										// value={statusStaffContent.map((item, index) => {
-										// 	return item.status;
-										// })}
 										className="w-[150px]"
 										onChange={e => {
 											handleChangeStatus(e);
@@ -319,7 +305,6 @@ export default function ControlStaff() {
 					<Pagination
 						showSizeChanger
 						onChange={onChange}
-						// onShowSizeChange={onShowSizeChange}
 						defaultCurrent={1}
 						total={500}
 						defaultPageSize={6}
@@ -339,7 +324,6 @@ export default function ControlStaff() {
 				setIsModalVisibleReset={setIsModalVisibleReset}
 				handleCancelReset={handleCancelReset}
 				handleOkReset={handleOkReset}
-				// userName={userName}
 				idUserUse={idUserUse}
 			/>
 			<ModalConfirm
