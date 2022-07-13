@@ -52,6 +52,7 @@ export default function ControlStaff() {
 	const [functionUserGroup, setFunctionUserGroup] = useState<any>([]);
 	const [groupUserID, setGroupUserID] = useState('');
 	const [userNameHyberLink, setUserNameHyberLink] = useState('');
+	const [lengthArrayAllUser, setLengthArrayAllUser] = useState<number>(0);
 
 	useEffect(() => {
 		const params = 'UserStatus';
@@ -149,6 +150,7 @@ export default function ControlStaff() {
 		getAllUser()
 			.then(res => {
 				console.log(res);
+				setLengthArrayAllUser(res.data.data.length);
 			})
 			.catch(err => {
 				console.log(err);
@@ -318,6 +320,10 @@ export default function ControlStaff() {
 			}
 		});
 	};
+	console.log(lengthArrayAllUser);
+	console.log(sizePage);
+
+	console.log(Math.floor(lengthArrayAllUser / sizePage) + 1);
 	return (
 		<>
 			<div>
@@ -368,39 +374,14 @@ export default function ControlStaff() {
 					</Form>
 				</div>
 				<div className="mb-5">
-					<Table
-						columns={columns}
-						dataSource={data}
-						pagination={false}
-
-						// onRow={(record, rowIndex) => {
-						// 	return {
-						// 		onClick: event => {
-						// 			console.log(record);
-						// 			console.log(rowIndex);
-						// 		}, // click row
-						// 		onDoubleClick: event => {}, // double click row
-						// 		onContextMenu: event => {}, // right button click row
-						// 		onMouseEnter: event => {}, // mouse enter row
-						// 		onMouseLeave: event => {}, // mouse leave row
-						// 	};
-						// }}
-						// onHeaderRow={(columns, index) => {
-						// 	return {
-						// 		onClick: () => {
-						// 			console.log(columns);
-						// 			console.log(index);
-						// 		},
-						// 	};
-						// }}
-					/>
+					<Table columns={columns} dataSource={data} pagination={false} />
 				</div>
 				<div>
 					<Pagination
 						showSizeChanger
 						onChange={onChange}
 						defaultCurrent={1}
-						total={500}
+						total={lengthArrayAllUser}
 						defaultPageSize={6}
 						style={{ display: 'flex', justifyContent: 'end' }}
 					/>
