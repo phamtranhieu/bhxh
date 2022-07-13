@@ -14,6 +14,8 @@ import {
 	inforUserPagination,
 	resetPasssUser,
 	updateUser,
+	getListTextGroup,
+	getListFunctionUser,
 } from '../../service/user/UserService';
 
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
@@ -22,11 +24,6 @@ import ModalCreate from '../modal-create/ModalCreate';
 import ModalEdit from '../modal-edit/ModalEdit';
 import ModalReset from '../modal-reset/ModalReset';
 import ModalConfirm from '../modal-confirm/ModalConfirm';
-
-const statusStaffContent = [
-	{ status: 'Đang hoạt động', id: 1, value: 'Active' },
-	{ status: 'Đã vô hiệu hóa', id: 2, value: 'Inactive' },
-];
 
 interface DataType {
 	key: string;
@@ -39,6 +36,50 @@ interface DataType {
 }
 
 export default function ControlStaff() {
+	const [sortActive, setSortActive] = useState('');
+	const [searchParams, setSearchParams] = useSearchParams();
+	const [userName, setUserName] = useState('');
+	const [numberPage, setNumberPage] = useState<number>(0);
+	const [sizePage, setSizePage] = useState<number>(6);
+	const [dataUser, setDataUser] = useState<any>([]);
+	const [idUserUse, setIdUserUse] = useState('');
+	const [idUserUseConfirm, setIdUserUseConfirm] = useState('');
+	const [filterSearch, setFilterSearch] = useState<string>('');
+	const typingTimeoutRef = useRef(null);
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const [statusUser, setStatusUser] = useState('');
+	const [valueGroup, setValueGroup] = useState<any>([]);
+	const [functionUserGroup, setFunctionUserGroup] = useState<any>([]);
+	const [groupUserID, setGroupUserID] = useState('');
+	const [userNameHyberLink, setUserNameHyberLink] = useState('');
+
+	useEffect(() => {
+		const params = 'UserStatus';
+		getListTextGroup(params)
+			.then(res => {
+				console.log(res);
+				setValueGroup(res.data.data);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+		getListFunctionUser()
+			.then(res => {
+				console.log(res);
+				setFunctionUserGroup(res.data.data);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	}, []);
+
+	const statusStaffContent = valueGroup.map((item: any, index: number) => {
+		return { status: item.displayText, value: item.value };
+	});
+
+	const functionUser = functionUserGroup.map((item: any, index: number) => {
+		return { name: item.name, id: item.id };
+	});
 	const columns: ColumnsType<DataType> = [
 		{
 			title: 'STT',
@@ -49,6 +90,19 @@ export default function ControlStaff() {
 			title: 'Tên đăng nhập',
 			dataIndex: 'name',
 			key: 'name',
+			render: (_, record) => (
+				<div
+					onClick={() => {
+						console.log(record);
+						setUserNameHyberLink(record.name);
+						setUserName('');
+						showModalEdit();
+					}}
+					style={{ color: 'blue' }}
+				>
+					{record.name}
+				</div>
+			),
 		},
 		{
 			title: 'Nhân viên',
@@ -90,18 +144,6 @@ export default function ControlStaff() {
 			),
 		},
 	];
-	const [sortActive, setSortActive] = useState('');
-	const [searchParams, setSearchParams] = useSearchParams();
-	const [userName, setUserName] = useState('');
-	const [numberPage, setNumberPage] = useState<number>(0);
-	const [sizePage, setSizePage] = useState<number>(6);
-	const [dataUser, setDataUser] = useState<any>([]);
-	const [idUserUse, setIdUserUse] = useState('');
-	const [idUserUseConfirm, setIdUserUseConfirm] = useState('');
-	const [filterSearch, setFilterSearch] = useState<string>('');
-	const typingTimeoutRef = useRef(null);
-	const [isModalVisible, setIsModalVisible] = useState(false);
-	const [statusUser, setStatusUser] = useState('');
 
 	useEffect(() => {
 		getAllUser()
@@ -191,7 +233,6 @@ export default function ControlStaff() {
 	};
 
 	const data: DataType[] = dataUser.map((item: any, index: number) => {
-		console.log(item);
 		return {
 			key: index + 1,
 			name: item.username,
@@ -211,7 +252,7 @@ export default function ControlStaff() {
 	});
 
 	useEffect(() => {
-		inforUserPagination(numberPage, sizePage, filterSearch, sortActive)
+		inforUserPagination(numberPage, sizePage, filterSearch, sortActive, groupUserID)
 			.then(res => {
 				console.log(res);
 				setDataUser(res.data.data.items);
@@ -219,7 +260,7 @@ export default function ControlStaff() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, [numberPage, sizePage, filterSearch, sortActive]);
+	}, [numberPage, sizePage, filterSearch, sortActive, groupUserID]);
 
 	const onChange: PaginationProps['onChange'] = (page, size) => {
 		setNumberPage(page - 1);
@@ -251,14 +292,31 @@ export default function ControlStaff() {
 		});
 	};
 	const handleChangeStatus = (e: any) => {
-		const valueStatus = statusStaffContent.find((item, index) => {
+		const valueStatus = statusStaffContent.find((item: any, index: any) => {
+			console.log(item);
 			if (index == e) {
 				return item;
 			}
 		})?.value;
+
 		if (valueStatus != undefined) {
 			setSortActive(valueStatus);
 		}
+		setSearchParams({
+			...searchParams,
+			pageNumber: `${numberPage + 1}`,
+			pageSize: `${sizePage}`,
+			searchKey: e.target?.value,
+			status: sortActive,
+		});
+	};
+	const handleChangeFunctionUser = (e: any) => {
+		functionUser.map((item: any, index: number) => {
+			if (e == index) {
+				console.log(item);
+				setGroupUserID(item.id);
+			}
+		});
 	};
 	return (
 		<>
@@ -267,7 +325,7 @@ export default function ControlStaff() {
 					<Form name="basic" initialValues={{ remember: true }} autoComplete="off">
 						<div className="flex justify-between">
 							<Form.Item name="search">
-								<Input onChange={handleChange} />
+								<Input placeholder="tìm kiếm" style={{ width: '400px' }} onChange={handleChange} />
 							</Form.Item>
 							<Button onClick={showModal}>Thêm mới</Button>
 						</div>
@@ -277,15 +335,16 @@ export default function ControlStaff() {
 								<Form.Item
 									name="status"
 									rules={[{ required: true, message: 'Please input your username!' }]}
+									initialValue="Tất cả"
 								>
 									<Select
-										defaultValue={'Tất cả'}
+										style={{ width: '150px' }}
 										className="w-[150px]"
 										onChange={e => {
 											handleChangeStatus(e);
 										}}
 									>
-										{statusStaffContent.map((item, index) => {
+										{statusStaffContent.map((item: any, index: number) => {
 											return <Option key={index}>{item.status}</Option>;
 										})}
 									</Select>
@@ -293,9 +352,15 @@ export default function ControlStaff() {
 							</div>
 							<div>
 								<p>Vai trò của người dùng</p>
-								<Select defaultValue={'Tất cả'} className="w-[150px]">
-									{statusStaffContent.map((item, index) => {
-										return <Option key={index}>{item.status}</Option>;
+								<Select
+									defaultValue={'Tất cả'}
+									className="w-[150px]"
+									onChange={e => {
+										handleChangeFunctionUser(e);
+									}}
+								>
+									{functionUser.map((item: any, index: number) => {
+										return <Option key={index}>{item.name}</Option>;
 									})}
 								</Select>
 							</div>
@@ -303,7 +368,32 @@ export default function ControlStaff() {
 					</Form>
 				</div>
 				<div className="mb-5">
-					<Table columns={columns} dataSource={data} pagination={false} />
+					<Table
+						columns={columns}
+						dataSource={data}
+						pagination={false}
+
+						// onRow={(record, rowIndex) => {
+						// 	return {
+						// 		onClick: event => {
+						// 			console.log(record);
+						// 			console.log(rowIndex);
+						// 		}, // click row
+						// 		onDoubleClick: event => {}, // double click row
+						// 		onContextMenu: event => {}, // right button click row
+						// 		onMouseEnter: event => {}, // mouse enter row
+						// 		onMouseLeave: event => {}, // mouse leave row
+						// 	};
+						// }}
+						// onHeaderRow={(columns, index) => {
+						// 	return {
+						// 		onClick: () => {
+						// 			console.log(columns);
+						// 			console.log(index);
+						// 		},
+						// 	};
+						// }}
+					/>
 				</div>
 				<div>
 					<Pagination
@@ -322,6 +412,7 @@ export default function ControlStaff() {
 				handleCancelEdit={handleCancelEdit}
 				handleOkEdit={handleOkEdit}
 				userName={userName}
+				userNameHyberLink={userNameHyberLink}
 			/>
 			<ModalReset
 				isModalVisibleReset={isModalVisibleReset}

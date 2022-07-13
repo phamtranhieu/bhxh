@@ -9,9 +9,11 @@ export const inforUserPagination = async (
 	pageSize: number,
 	filterSearch: string,
 	sortActive: string,
+	groupUserID: string,
 ) => {
-	console.log(sortActive);
-	return await apiClient.get(`/user/filter/${pages}/${pageSize}?searchKey=${filterSearch}&status=${sortActive}`);
+	return await apiClient.get(
+		`/user/filter/${pages}/${pageSize}?searchKey=${filterSearch}&status=${sortActive}&userGroupId=${groupUserID}`,
+	);
 };
 
 export const creatUser = async (params: any) => {
@@ -36,3 +38,10 @@ export const getAllUser = async () => {
 	return await apiClient.get(`/user/get-all`);
 };
 // const abc = 'Đang hoạt động';
+export const getListTextGroup = async (params: any) => {
+	return await apiClient.get(`/masterdata/config-text/${params}`);
+};
+
+export const getListFunctionUser = async () => {
+	return await apiClient.get(`/user-group/get-all`);
+};

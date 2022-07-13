@@ -22,7 +22,7 @@ import { MessageConstantError, MessageConstantSuccess } from '../../constant/aut
 export default function ModalEdit(props: any) {
 	const navigate = useNavigate();
 	const [formModalEdit] = Form.useForm();
-	const { isModalVisibleEdit, handleCancelEdit, handleOkEdit, userName } = props;
+	const { isModalVisibleEdit, handleCancelEdit, userName, userNameHyberLink } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
 
 	const onFinish = (values: any) => {
@@ -144,27 +144,8 @@ export default function ModalEdit(props: any) {
 				<Form.Item
 					label={<label className="font-semibold text-[16px]">Tên đăng nhập</label>}
 					name="usernameEdit"
-					initialValue={userName}
-					// rules={[
-					// 	{
-					// 		validator(rule, value) {
-					// 			const check = /^[a-zA-Z0-9]+$/;
-					// 			// check if no store selected
-					// 			// const storeOther = productsFormValue[index]?.store_other;
-					// 			if (value == '' || value == undefined || value == null) {
-					// 				return Promise.reject(new Error('Vui lòng nhập tên đăng nhập!'));
-					// 			} else if (!check.test(value)) {
-					// 				return Promise.reject(
-					// 					new Error('Chỉ được phép nhập chữ và số, không nhập ký tự đặc biệt!'),
-					// 				);
-					// 			} else {
-					// 				return Promise.resolve();
-					// 			}
-					// 		},
-					// 	},
-					// ]}
 				>
-					<Input placeholder={userName} disabled />
+					<Input placeholder={userName || userNameHyberLink} disabled />
 				</Form.Item>
 				<Form.Item
 					label={<label className="font-semibold text-[16px]">Email</label>}

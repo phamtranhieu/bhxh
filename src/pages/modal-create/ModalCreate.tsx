@@ -56,7 +56,6 @@ export default function ModalCreate(props: any) {
 			employeeId: employeeID,
 			userGroupId: userGroupID,
 		};
-		console.log(params);
 		creatUser(params)
 			.then(res => {
 				console.log(res);
