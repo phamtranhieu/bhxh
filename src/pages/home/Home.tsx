@@ -10,7 +10,7 @@ import { useNavigate, Outlet } from 'react-router-dom';
 import { deleteAccessToken, deleteUserAndPasswordLocal } from '../../helper/tokenHelper';
 import { configApp } from '../../config/config';
 import { userLogout } from '../../service/auth/AuthService';
-
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 import {
 	AppstoreOutlined,
 	MailOutlined,
@@ -90,12 +90,12 @@ export default function Home() {
 		userLogout(accessToken!)
 			.then(res => {
 				console.log(res);
-				message.success('Bạn đã đăng xuất thành công');
+				message.success(MessageConstantSuccess.loginSuccess);
 				deleteUserAndPasswordLocal();
 				navigate('/');
 			})
 			.catch(err => {
-				message.error('Bạn đã đăng xuất thất bại');
+				message.error(MessageConstantError.logoutUnSuccess);
 				console.log(err);
 			});
 		// deleteAccessToken();

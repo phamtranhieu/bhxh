@@ -16,8 +16,9 @@ import {
 	updateUser,
 } from '../../service/user/UserService';
 import { useNavigate } from 'react-router-dom';
-
+import { errorAuth } from '../../enum/auth/auth.error';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ModalCreate(props: any) {
 	const navigate = useNavigate();
@@ -42,7 +43,6 @@ export default function ModalCreate(props: any) {
 				return item;
 			}
 		}).employee.id;
-		console.log(employeeID);
 		const userGroupID = data.find((item, index) => {
 			if (numberStaff == index) {
 				return item;
@@ -60,17 +60,17 @@ export default function ModalCreate(props: any) {
 		creatUser(params)
 			.then(res => {
 				console.log(res);
-				message.success('Tạo mới tài khoản người dùng thành công');
+				message.success(MessageConstantSuccess.createUserSuccess);
 				navigate('/home');
 			})
 			.catch(err => {
 				console.log(err);
-				if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-					message.error('Nhân viên đã có tài khoản');
-				} else if (err.response.data.error.code == 'EMAIL_ALREADY_EXISTS') {
-					message.error('Email đã tồn tại');
+				if (err.response.data.error.code == errorAuth.HAD_ACCOUNT) {
+					message.error(MessageConstantError.staffHasAccount);
+				} else if (err.response.data.error.code == errorAuth.EMAIL_ALREADY) {
+					message.error(MessageConstantError.EmailHad);
 				} else {
-					message.error('Tạo mới tài khoản người dùng thất bại');
+					message.error(MessageConstantError.createUserUnsuccess);
 				}
 			});
 	};

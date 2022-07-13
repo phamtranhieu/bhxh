@@ -17,6 +17,7 @@ import {
 } from '../../service/user/UserService';
 import { useNavigate } from 'react-router-dom';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ModalReset(props: any) {
 	const navigate = useNavigate();
@@ -70,7 +71,7 @@ export default function ModalReset(props: any) {
 			})
 			.catch(err => {
 				console.log(err);
-				message.error('Bạn đổi mật khẩu thất bại');
+				message.error(MessageConstantError.changePassUnsuccess);
 			});
 		setIsModalVisibleResetContinue(true);
 	};

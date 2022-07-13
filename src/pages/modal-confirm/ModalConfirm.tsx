@@ -17,6 +17,7 @@ import {
 } from '../../service/user/UserService';
 import { useNavigate } from 'react-router-dom';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ModalConfirm(props: any) {
 	const navigate = useNavigate();
@@ -26,24 +27,18 @@ export default function ModalConfirm(props: any) {
 		changeActivityUser(objConfirm)
 			.then(res => {
 				console.log(res);
-				message.success('Bạn đã cập nhật trạng thái thành công');
+				message.success(MessageConstantSuccess.updateStatusSuccess);
 				navigate('/home');
 			})
 			.catch(err => {
 				console.log(err);
-				message.success('Bạn đã cập nhật trạng thái thất bại');
+				message.success(MessageConstantError.updateStatusUnSuccess);
 			});
 		handleCancelConfirm();
 	};
 	return (
 		<div>
-			<Modal
-				visible={isModalVisibleConfirm}
-				centered
-				onOk={handleOkConfirm}
-				onCancel={handleCancelConfirm}
-				footer={null}
-			>
+			<Modal visible={isModalVisibleConfirm} centered onCancel={handleCancelConfirm} footer={null}>
 				{statusUser == 'Active' ? (
 					<h1>XÁC NHẬN VÔ HIỆU HÓA TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
 				) : (

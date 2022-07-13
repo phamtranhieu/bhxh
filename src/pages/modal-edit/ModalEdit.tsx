@@ -17,6 +17,7 @@ import {
 } from '../../service/user/UserService';
 import { useNavigate } from 'react-router-dom';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ModalEdit(props: any) {
 	const navigate = useNavigate();
@@ -63,12 +64,12 @@ export default function ModalEdit(props: any) {
 		updateUser(params)
 			.then(res => {
 				console.log(res);
-				message.success('Cập nhật tài khoản người dùng thành công');
+				message.success(MessageConstantSuccess.updateUserSuccess);
 				navigate('/home');
 			})
 			.catch(err => {
 				console.log(err);
-				message.error('Cập nhật tài khoản người dùng thất bại');
+				message.error(MessageConstantError.updateUserUnsuccess);
 			});
 	};
 

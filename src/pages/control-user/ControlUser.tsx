@@ -102,6 +102,17 @@ export default function ControlStaff() {
 	const typingTimeoutRef = useRef(null);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [statusUser, setStatusUser] = useState('');
+
+	useEffect(() => {
+		getAllUser()
+			.then(res => {
+				console.log(res);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	}, []);
+
 	const handleClickReset = (params: any) => {
 		showModalReset();
 		const idUser = dataUser.find((item: any, index: number) => {
@@ -180,28 +191,21 @@ export default function ControlStaff() {
 	};
 
 	const data: DataType[] = dataUser.map((item: any, index: number) => {
+		console.log(item);
 		return {
 			key: index + 1,
 			name: item.username,
 			staff: item?.employee?.name || 'N/A',
 			email: item.email ? item.email : 'null',
 			job: item.userGroup.name,
-			active:
-				item.status.value == 'Active' ? (
-					<Switch
-						checked
-						onClick={() => {
-							handleConfirm(item.status.value, item.id);
-						}}
-					/>
-				) : (
-					<Switch
-						checked={false}
-						onClick={() => {
-							handleConfirm(item.status.value, item.id);
-						}}
-					/>
-				),
+			active: (
+				<Switch
+					checked={item.status.value == 'Active' ? true : false}
+					onClick={() => {
+						handleConfirm(item.status.value, item.id);
+					}}
+				/>
+			),
 			action: '',
 		};
 	});
