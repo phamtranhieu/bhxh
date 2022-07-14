@@ -125,7 +125,7 @@ export default function ModalReset(props: any) {
 				>
 					<Form.Item
 						label={
-							<label className="font-semibold text-[16px] text-left" style={{ textAlign: 'left' }}>
+							<label className="font-semibold text-[16px] text-left">
 								Mật khẩu mới cho tài khoản này
 							</label>
 						}

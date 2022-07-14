@@ -64,9 +64,9 @@ export default function ModalCreate(props: any) {
 			})
 			.catch(err => {
 				console.log(err);
-				if (err.response.data.error.code == errorAuth.HAD_ACCOUNT) {
+				if (err.response.data.error.code === errorAuth.HAD_ACCOUNT) {
 					message.error(MessageConstantError.staffHasAccount);
-				} else if (err.response.data.error.code == errorAuth.EMAIL_ALREADY) {
+				} else if (err.response.data.error.code === errorAuth.EMAIL_ALREADY) {
 					message.error(MessageConstantError.EmailHad);
 				} else {
 					message.error(MessageConstantError.createUserUnsuccess);

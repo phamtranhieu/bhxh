@@ -4,15 +4,9 @@ export const inforUser = async (params: any) => {
 	return await apiClient.get(`/employee/${params}`);
 };
 
-export const inforUserPagination = async (
-	pages: number,
-	pageSize: number,
-	filterSearch: string,
-	sortActive: string,
-	groupUserID: string,
-) => {
+export const inforUserPagination = async (objParams: any) => {
 	return await apiClient.get(
-		`/user/filter/${pages}/${pageSize}?searchKey=${filterSearch}&status=${sortActive}&userGroupId=${groupUserID}`,
+		`/user/filter/${objParams.numberPageWeb}/${objParams.sizePageWeb}?searchKey=${objParams.filterSearchWeb}&status=${objParams.sortActiveWeb}&userGroupId=${objParams.groupUserIDWeb}`,
 	);
 };
 

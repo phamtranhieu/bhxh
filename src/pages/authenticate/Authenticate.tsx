@@ -59,9 +59,9 @@ export default function Authenticate() {
 			})
 			.catch(error => {
 				console.log(error);
-				if (error.response.data.error.code == 'WRONG_USERNAME') {
+				if (error.response.data.error.code === 'WRONG_USERNAME') {
 					message.error(MessageConstantError.emailError);
-				} else if (error.response.data.error.code == 'WRONG_PASSWORD') {
+				} else if (error.response.data.error.code === 'WRONG_PASSWORD') {
 					message.error(MessageConstantError.passwordError);
 				} else {
 					message.error(MessageConstantError.loginUnsuccess);

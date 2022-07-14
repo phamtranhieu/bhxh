@@ -257,9 +257,15 @@ export default function ControlStaff() {
 			action: '',
 		};
 	});
-
+	const objParams = {
+		numberPageWeb: numberPage,
+		sizePageWeb: sizePage,
+		filterSearchWeb: filterSearch,
+		sortActiveWeb: sortActive,
+		groupUserIDWeb: groupUserID,
+	};
 	useEffect(() => {
-		inforUserPagination(numberPage, sizePage, filterSearch, sortActive, groupUserID)
+		inforUserPagination(objParams)
 			.then(res => {
 				console.log(res);
 				setDataUser(res.data.data.items);
@@ -267,7 +273,7 @@ export default function ControlStaff() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, [numberPage, sizePage, filterSearch, sortActive, groupUserID, dataReloadPage]);
+	}, [objParams, dataReloadPage]);
 
 	const onChange: PaginationProps['onChange'] = (page, size) => {
 		setNumberPage(page - 1);
