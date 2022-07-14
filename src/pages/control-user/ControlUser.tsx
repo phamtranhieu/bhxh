@@ -53,7 +53,7 @@ export default function ControlStaff() {
 	const [groupUserID, setGroupUserID] = useState('');
 	const [userNameHyberLink, setUserNameHyberLink] = useState('');
 	const [lengthArrayAllUser, setLengthArrayAllUser] = useState<number>(0);
-
+	const [dataReloadPage, setDataReloadPage] = useState<number>(0);
 	useEffect(() => {
 		const params = 'UserStatus';
 		getListTextGroup(params)
@@ -81,6 +81,11 @@ export default function ControlStaff() {
 	const functionUser = functionUserGroup.map((item: any, index: number) => {
 		return { name: item.name, id: item.id };
 	});
+
+	const getReloadPage = (data: any) => {
+		setDataReloadPage(data);
+	};
+
 	const columns: ColumnsType<DataType> = [
 		{
 			title: 'STT',
@@ -262,7 +267,7 @@ export default function ControlStaff() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, [numberPage, sizePage, filterSearch, sortActive, groupUserID]);
+	}, [numberPage, sizePage, filterSearch, sortActive, groupUserID, dataReloadPage]);
 
 	const onChange: PaginationProps['onChange'] = (page, size) => {
 		setNumberPage(page - 1);
@@ -320,10 +325,7 @@ export default function ControlStaff() {
 			}
 		});
 	};
-	console.log(lengthArrayAllUser);
-	console.log(sizePage);
 
-	console.log(Math.floor(lengthArrayAllUser / sizePage) + 1);
 	return (
 		<>
 			<div>
@@ -331,13 +333,17 @@ export default function ControlStaff() {
 					<Form name="basic" initialValues={{ remember: true }} autoComplete="off">
 						<div className="flex justify-between">
 							<Form.Item name="search">
-								<Input placeholder="tìm kiếm" style={{ width: '400px' }} onChange={handleChange} />
+								<Input
+									placeholder="Tìm kiếm theo tên đăng nhập, email, nhân viên"
+									style={{ width: '400px' }}
+									onChange={handleChange}
+								/>
 							</Form.Item>
 							<Button onClick={showModal}>Thêm mới</Button>
 						</div>
 						<div className="flex">
 							<div className="mr-5">
-								<p>Trạng thái</p>
+								<p className="text-[16px] font-semibold">Trạng thái</p>
 								<Form.Item
 									name="status"
 									rules={[{ required: true, message: 'Please input your username!' }]}
@@ -357,7 +363,7 @@ export default function ControlStaff() {
 								</Form.Item>
 							</div>
 							<div>
-								<p>Vai trò của người dùng</p>
+								<p className="text-[16px] font-semibold">Vai trò của người dùng</p>
 								<Select
 									defaultValue={'Tất cả'}
 									className="w-[150px]"
@@ -408,6 +414,7 @@ export default function ControlStaff() {
 				handleOkConfirm={handleOkConfirm}
 				statusUser={statusUser}
 				idUserUseConfirm={idUserUseConfirm}
+				getReloadPage={getReloadPage}
 			/>
 		</>
 	);

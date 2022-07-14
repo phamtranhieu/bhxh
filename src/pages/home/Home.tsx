@@ -112,7 +112,12 @@ export default function Home() {
 		<Layout className="">
 			<Header className="header flex items-center w-full justify-between h-[200px]">
 				<div className="flex items-center">
-					<UserOutlined style={{ color: 'white', marginRight: '20px' }} />
+					<UserOutlined
+						onClick={() => {
+							navigate('/home');
+						}}
+						style={{ color: 'white', marginRight: '20px' }}
+					/>
 					<p className="text-white mb-0 title">NỀN TẢNG BẢO TRÌ MÁY MÓC THIẾT BỊ</p>
 				</div>
 				<div className="flex items-center ">
