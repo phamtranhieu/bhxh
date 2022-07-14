@@ -31,7 +31,6 @@ export const deleteUser = async (params: any) => {
 export const getAllUser = async () => {
 	return await apiClient.get(`/user/get-all`);
 };
-// const abc = 'Đang hoạt động';
 export const getListTextGroup = async (params: any) => {
 	return await apiClient.get(`/masterdata/config-text/${params}`);
 };

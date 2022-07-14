@@ -21,18 +21,13 @@ import { MessageConstantError, MessageConstantSuccess } from '../../constant/aut
 
 export default function ModalConfirm(props: any) {
 	const navigate = useNavigate();
-	const { isModalVisibleConfirm, handleCancelConfirm, handleOkConfirm, statusUser, idUserUseConfirm, getReloadPage } =
-		props;
+	const { isModalVisibleConfirm, handleCancelConfirm, handleOkConfirm, statusUser, idUserUseConfirm } = props;
 	const handleContinue = () => {
 		const objConfirm = { id: idUserUseConfirm };
 		changeActivityUser(objConfirm)
 			.then(res => {
 				console.log(res);
 				message.success(MessageConstantSuccess.updateStatusSuccess);
-				const min = 1;
-				const max = 100;
-				const rand = Math.floor(min + Math.random() * (max - min));
-				getReloadPage(rand);
 			})
 			.catch(err => {
 				console.log(err);

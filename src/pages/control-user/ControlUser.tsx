@@ -82,10 +82,6 @@ export default function ControlStaff() {
 		return { name: item.name, id: item.id };
 	});
 
-	const getReloadPage = (data: any) => {
-		setDataReloadPage(data);
-	};
-
 	const columns: ColumnsType<DataType> = [
 		{
 			title: 'STT',
@@ -273,7 +269,7 @@ export default function ControlStaff() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, [objParams, dataReloadPage]);
+	}, [objParams]);
 
 	const onChange: PaginationProps['onChange'] = (page, size) => {
 		setNumberPage(page - 1);
@@ -420,7 +416,6 @@ export default function ControlStaff() {
 				handleOkConfirm={handleOkConfirm}
 				statusUser={statusUser}
 				idUserUseConfirm={idUserUseConfirm}
-				getReloadPage={getReloadPage}
 			/>
 		</>
 	);
