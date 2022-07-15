@@ -37,10 +37,10 @@ export default function ModalConfirm(props: any) {
 		const objConfirm = { id: idUserUseConfirm };
 		dataUser.map((item: any, index: number) => {
 			if (idUserUseConfirm === item.id) {
-				if (statusUser === statusUserConfirm.active) {
-					dataUser[index].status.value = 'Inactive';
-				} else {
-					dataUser[index].status.value = 'Active';
+				{
+					statusUser === statusUserConfirm.active
+						? (dataUser[index].status.value = 'Inactive')
+						: (dataUser[index].status.value = 'Active');
 				}
 			}
 		});
@@ -58,16 +58,16 @@ export default function ModalConfirm(props: any) {
 	return (
 		<div>
 			<Modal visible={isModalVisibleConfirm} centered onCancel={handleCancelConfirm} footer={null}>
-				{statusUser == statusUserConfirm.active ? (
-					<h1>XÁC NHẬN VÔ HIỆU HÓA TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
-				) : (
-					<h1>XÁC NHẬN KÍCH HOẠT TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
-				)}
-				{statusUser === statusUserConfirm.active ? (
-					<p>Bạn có chắc muốn vô hiệu hóa tài khoản của người dùng này</p>
-				) : (
-					<p>Bạn có chắc muốn kích hoạt tài khoản của người dùng này</p>
-				)}
+				<h1>
+					{statusUser == statusUserConfirm.active
+						? 'XÁC NHẬN VÔ HIỆU HÓA TÀI KHOẢN CỦA NGƯỜI DÙNG'
+						: 'XÁC NHẬN KÍCH HOẠT TÀI KHOẢN CỦA NGƯỜI DÙNG'}
+				</h1>
+				<p>
+					{statusUser == statusUserConfirm.active
+						? 'Bạn có chắc muốn vô hiệu hóa tài khoản của người dùng này'
+						: 'Bạn có chắc muốn kích hoạt tài khoản của người dùng này'}
+				</p>
 				<div className="flex justify-end">
 					<Button onClick={handleCancelConfirm}>Không</Button>
 					<Button className="ml-2" onClick={handleContinue}>

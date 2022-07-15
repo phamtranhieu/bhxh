@@ -62,13 +62,15 @@ export default function ModalCreate(props: any) {
 				navigate('/home');
 			})
 			.catch(err => {
-				console.log(err);
-				if (err.response.data.error.code === errorAuth.HAD_ACCOUNT) {
-					message.error(MessageConstantError.staffHasAccount);
-				} else if (err.response.data.error.code === errorAuth.EMAIL_ALREADY) {
-					message.error(MessageConstantError.EmailHad);
-				} else {
-					message.error(MessageConstantError.createUserUnsuccess);
+				switch (err.response.data.error.code) {
+					case errorAuth.HAD_ACCOUNT:
+						message.error(MessageConstantError.staffHasAccount);
+						break;
+					case errorAuth.EMAIL_ALREADY:
+						message.error(MessageConstantError.EmailHad);
+						break;
+					default:
+						message.error(MessageConstantError.createUserUnsuccess);
 				}
 			});
 	};
