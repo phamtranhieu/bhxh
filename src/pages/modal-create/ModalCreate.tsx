@@ -27,7 +27,6 @@ export default function ModalCreate(props: any) {
 	const [dataUserAll, setDataUserAll] = useState([]);
 
 	const onFinish = (values: any) => {
-		console.log(values);
 		const numberStaff = values.staff;
 		const data = dataUserAll
 			.filter((item: any) => {

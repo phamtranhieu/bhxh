@@ -53,7 +53,6 @@ export default function ModalEdit(props: any) {
 				return item;
 			}
 		}).userGroup.id;
-		console.log(data);
 
 		const params = {
 			id: IDEdit,
@@ -84,11 +83,11 @@ export default function ModalEdit(props: any) {
 		formModalEdit.setFieldsValue({
 			staffEdit: '',
 			usernameEdit: '',
+			userName: '',
 			email: '',
 			action: '',
 		});
 	}
-
 	useEffect(() => {
 		getAllUser()
 			.then(res => {

@@ -18,6 +18,8 @@
     "crypto-js": "^4.1.1",
     "eslint": "^8.19.0",
     "moment": "^2.29.3",
+    "query-string": "^7.1.1",
+    "querystringify": "^2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",

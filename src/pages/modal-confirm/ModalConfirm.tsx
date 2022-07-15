@@ -19,11 +19,31 @@ import { useNavigate } from 'react-router-dom';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
+const statusUserConfirm = {
+	active: 'Active',
+	inactive: 'Inactive',
+};
 export default function ModalConfirm(props: any) {
 	const navigate = useNavigate();
-	const { isModalVisibleConfirm, handleCancelConfirm, handleOkConfirm, statusUser, idUserUseConfirm } = props;
+	const {
+		isModalVisibleConfirm,
+		setIsModalVisibleConfirm,
+		handleCancelConfirm,
+		statusUser,
+		idUserUseConfirm,
+		dataUser,
+	} = props;
 	const handleContinue = () => {
 		const objConfirm = { id: idUserUseConfirm };
+		dataUser.map((item: any, index: number) => {
+			if (idUserUseConfirm === item.id) {
+				if (statusUser === statusUserConfirm.active) {
+					dataUser[index].status.value = 'Inactive';
+				} else {
+					dataUser[index].status.value = 'Active';
+				}
+			}
+		});
 		changeActivityUser(objConfirm)
 			.then(res => {
 				console.log(res);
@@ -33,17 +53,17 @@ export default function ModalConfirm(props: any) {
 				console.log(err);
 				message.success(MessageConstantError.updateStatusUnSuccess);
 			});
-		handleCancelConfirm();
+		setIsModalVisibleConfirm(false);
 	};
 	return (
 		<div>
 			<Modal visible={isModalVisibleConfirm} centered onCancel={handleCancelConfirm} footer={null}>
-				{statusUser == 'Active' ? (
+				{statusUser == statusUserConfirm.active ? (
 					<h1>XÁC NHẬN VÔ HIỆU HÓA TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
 				) : (
 					<h1>XÁC NHẬN KÍCH HOẠT TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
 				)}
-				{statusUser === 'Active' ? (
+				{statusUser === statusUserConfirm.active ? (
 					<p>Bạn có chắc muốn vô hiệu hóa tài khoản của người dùng này</p>
 				) : (
 					<p>Bạn có chắc muốn kích hoạt tài khoản của người dùng này</p>

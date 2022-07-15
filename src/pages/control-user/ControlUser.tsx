@@ -1,10 +1,11 @@
 import './ControlUser.scss';
 import { Button, Input, Select, Pagination, Modal, Form, Switch } from 'antd';
 const { Option } = Select;
+var qs = require('querystringify');
 import type { PaginationProps } from 'antd';
 import { Space, Table, Tag } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import {
 	changeActivityUser,
 	creatUser,
@@ -17,7 +18,7 @@ import {
 	getListTextGroup,
 	getListFunctionUser,
 } from '../../service/user/UserService';
-
+import { createFilterParam } from '../../helper/searchParamsHelper';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
 import { useSearchParams } from 'react-router-dom';
 import ModalCreate from '../modal-create/ModalCreate';
@@ -54,6 +55,13 @@ export default function ControlStaff() {
 	const [userNameHyberLink, setUserNameHyberLink] = useState('');
 	const [lengthArrayAllUser, setLengthArrayAllUser] = useState<number>(0);
 	const [dataReloadPage, setDataReloadPage] = useState<number>(0);
+	const [booleanCheckedStatus, setBooleanCheckedStatus] = useState<string>('');
+	const [IDbooleanCheckedStatus, setIDBooleanCheckedStatus] = useState<string>('');
+	const [objParams, setObjParams] = useState({
+		searchKey: '',
+		status: '',
+		groupUserIDWeb: '',
+	});
 	useEffect(() => {
 		const params = 'UserStatus';
 		getListTextGroup(params)
@@ -95,7 +103,6 @@ export default function ControlStaff() {
 			render: (_, record) => (
 				<div
 					onClick={() => {
-						console.log(record);
 						setUserNameHyberLink(record.name);
 						setUserName('');
 						showModalEdit();
@@ -228,13 +235,11 @@ export default function ControlStaff() {
 	const handleCancelConfirm = () => {
 		setIsModalVisibleConfirm(false);
 	};
-
 	const handleConfirm = (params: any, idparams: any) => {
 		setStatusUser(params);
-		showModalConfirm();
 		setIdUserUseConfirm(idparams);
+		setIsModalVisibleConfirm(false);
 	};
-
 	const data: DataType[] = dataUser.map((item: any, index: number) => {
 		return {
 			key: index + 1,
@@ -245,23 +250,35 @@ export default function ControlStaff() {
 			active: (
 				<Switch
 					checked={item.status.value == 'Active' ? true : false}
-					onClick={() => {
+					onChange={(checked: boolean) => {
+						setIDBooleanCheckedStatus(item.id);
+						setBooleanCheckedStatus(item.status.value);
 						handleConfirm(item.status.value, item.id);
+						showModalConfirm();
 					}}
 				/>
 			),
 			action: '',
 		};
 	});
-	const objParams = {
-		numberPageWeb: numberPage,
-		sizePageWeb: sizePage,
-		filterSearchWeb: filterSearch,
-		sortActiveWeb: sortActive,
-		groupUserIDWeb: groupUserID,
-	};
+
+	// useEffect(() => {
+	// 	inforUserPagination(numberPage, sizePage, filterSearch, sortActive, groupUserID)
+	// 		.then(res => {
+	// 			console.log(res);
+	// 			setDataUser(res.data.data.items);
+	// 		})
+	// 		.catch(err => {
+	// 			console.log(err);
+	// 		});
+	// }, [numberPage, sizePage, filterSearch, sortActive, groupUserID]);
+	// const objParams = {
+	// 	searchKey: filterSearch,
+	// 	status: sortActive,
+	// 	groupUserIDWeb: groupUserID,
+	// };
 	useEffect(() => {
-		inforUserPagination(objParams)
+		inforUserPagination(numberPage, sizePage, objParams)
 			.then(res => {
 				console.log(res);
 				setDataUser(res.data.data.items);
@@ -269,7 +286,7 @@ export default function ControlStaff() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, [objParams]);
+	}, [numberPage, sizePage, objParams]);
 
 	const onChange: PaginationProps['onChange'] = (page, size) => {
 		setNumberPage(page - 1);
@@ -299,6 +316,10 @@ export default function ControlStaff() {
 			searchKey: e.target.value,
 			status: sortActive,
 		});
+		setObjParams({
+			...objParams,
+			searchKey: e.target.value,
+		});
 	};
 	const handleChangeStatus = (e: any) => {
 		const valueStatus = statusStaffContent.find((item: any, index: any) => {
@@ -315,7 +336,11 @@ export default function ControlStaff() {
 			...searchParams,
 			pageNumber: `${numberPage + 1}`,
 			pageSize: `${sizePage}`,
-			searchKey: e.target?.value,
+			status: sortActive,
+			searchKey: filterSearch,
+		});
+		setObjParams({
+			...objParams,
 			status: sortActive,
 		});
 	};
@@ -411,11 +436,12 @@ export default function ControlStaff() {
 				idUserUse={idUserUse}
 			/>
 			<ModalConfirm
+				setIsModalVisibleConfirm={setIsModalVisibleConfirm}
 				isModalVisibleConfirm={isModalVisibleConfirm}
 				handleCancelConfirm={handleCancelConfirm}
-				handleOkConfirm={handleOkConfirm}
 				statusUser={statusUser}
 				idUserUseConfirm={idUserUseConfirm}
+				dataUser={dataUser}
 			/>
 		</>
 	);

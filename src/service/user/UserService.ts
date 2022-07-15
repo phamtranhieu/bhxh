@@ -1,13 +1,12 @@
 import apiClient from '../../config/apiClient';
+var qs = require('querystringify');
 
 export const inforUser = async (params: any) => {
 	return await apiClient.get(`/employee/${params}`);
 };
-
-export const inforUserPagination = async (objParams: any) => {
-	return await apiClient.get(
-		`/user/filter/${objParams.numberPageWeb}/${objParams.sizePageWeb}?searchKey=${objParams.filterSearchWeb}&status=${objParams.sortActiveWeb}&userGroupId=${objParams.groupUserIDWeb}`,
-	);
+export const inforUserPagination = async (numberPage: any, sizePage: any, objParams: any) => {
+	let objParamUrls = qs.stringify(objParams);
+	return await apiClient.get(`/user/filter/${numberPage}/${sizePage}?${objParamUrls}`);
 };
 
 export const creatUser = async (params: any) => {

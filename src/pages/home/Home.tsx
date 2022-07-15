@@ -62,7 +62,7 @@ export default function Home() {
 	const items: MenuItem[] = [
 		getItem('QUẢN LÝ TÀI KHOẢN', 'sub1', <MailOutlined />, [
 			getItem('Tài khoản người dùng', '/home/control-user'),
-			getItem('Nhóm người dùng', ''),
+			getItem('Nhóm người dùng', '/home/role-user'),
 		]),
 
 		getItem('QUẢN LÝ DỮ LIỆU NGUỒN', 'sub2', <AppstoreOutlined />, [
