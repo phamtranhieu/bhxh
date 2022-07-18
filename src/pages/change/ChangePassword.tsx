@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { userChangePassword } from '../../service/auth/AuthService';
 import { useNavigate, Outlet } from 'react-router-dom';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ChangePassword() {
 	const navigate = useNavigate();
@@ -28,12 +29,12 @@ export default function ChangePassword() {
 		userChangePassword(params)
 			.then((res: any) => {
 				console.log(res);
-				message.success('Bạn đã đổi mật khẩu thành công');
+				message.success(MessageConstantSuccess.changePasswordSuccess);
 				navigate('/home');
 			})
 			.catch(err => {
 				console.log(err);
-				message.error('Bạn đã đổi mật khẩu thất bại');
+				message.error(MessageConstantError.changePassUnsuccess);
 			});
 	};
 	const onFinishFailed = (errorInfo: any) => {
@@ -52,10 +53,7 @@ export default function ChangePassword() {
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
 				autoComplete="off"
-				style={{
-					width: '100%',
-				}}
-				className="flex justify-between"
+				className="flex justify-between w-full"
 			>
 				<div className="w-[600px]">
 					<Form.Item

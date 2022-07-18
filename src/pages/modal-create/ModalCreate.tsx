@@ -15,16 +15,18 @@ import {
 	resetPasssUser,
 	updateUser,
 } from '../../service/user/UserService';
-
+import { useNavigate } from 'react-router-dom';
+import { errorAuth } from '../../enum/auth/auth.error';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ModalCreate(props: any) {
+	const navigate = useNavigate();
 	const [formModalCreate] = Form.useForm();
 	const { isModalVisible, handleCancel, handleOk } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
 
 	const onFinish = (values: any) => {
-		console.log(values);
 		const numberStaff = values.staff;
 		const data = dataUserAll
 			.filter((item: any) => {
@@ -40,7 +42,6 @@ export default function ModalCreate(props: any) {
 				return item;
 			}
 		}).employee.id;
-		console.log(employeeID);
 		const userGroupID = data.find((item, index) => {
 			if (numberStaff == index) {
 				return item;
@@ -54,20 +55,24 @@ export default function ModalCreate(props: any) {
 			employeeId: employeeID,
 			userGroupId: userGroupID,
 		};
-		console.log(params);
-		// creatUser(params)
-		// 	.then(res => {
-		// 		console.log(res);
-		// 		message.success('Tạo mới tài khoản người dùng thành công');
-		// 	})
-		// 	.catch(err => {
-		// 		console.log(err);
-		// 		if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-		// 			message.error('Nhân viên đã có tài khoản');
-		// 		} else {
-		// 			message.error('Tạo mới tài khoản người dùng thất bại');
-		// 		}
-		// 	});
+		creatUser(params)
+			.then(res => {
+				console.log(res);
+				message.success(MessageConstantSuccess.createUserSuccess);
+				navigate('/home');
+			})
+			.catch(err => {
+				switch (err.response.data.error.code) {
+					case errorAuth.HAD_ACCOUNT:
+						message.error(MessageConstantError.staffHasAccount);
+						break;
+					case errorAuth.EMAIL_ALREADY:
+						message.error(MessageConstantError.EmailHad);
+						break;
+					default:
+						message.error(MessageConstantError.createUserUnsuccess);
+				}
+			});
 	};
 
 	const onFinishFailed = (errorInfo: any) => {
@@ -118,7 +123,7 @@ export default function ModalCreate(props: any) {
 				autoComplete="off"
 			>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhân viên</label>}
+					label={<label className="font-semibold text-base">Nhân viên</label>}
 					name="staff"
 					rules={[{ required: true, message: 'Vui lòng chọn nhân viên!' }]}
 				>
@@ -142,7 +147,7 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Tên đăng nhập</label>}
+					label={<label className="font-semibold text-base">Tên đăng nhập</label>}
 					name="username"
 					rules={[
 						{
@@ -166,7 +171,7 @@ export default function ModalCreate(props: any) {
 					<Input />
 				</Form.Item>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Email</label>}
+					label={<label className="font-semibold text-base">Email</label>}
 					name="email"
 					rules={[
 						{
@@ -187,7 +192,7 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Mật khẩu</label>}
+					label={<label className="font-semibold text-base">Mật khẩu</label>}
 					name="password"
 					rules={[
 						{
@@ -209,7 +214,7 @@ export default function ModalCreate(props: any) {
 					<Input.Password />
 				</Form.Item>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhập lại mật khẩu</label>}
+					label={<label className="font-semibold text-base">Nhập lại mật khẩu</label>}
 					name="rePassword"
 					rules={[
 						{
@@ -230,7 +235,7 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Vai trò của người dùng</label>}
+					label={<label className="font-semibold text-base">Vai trò của người dùng</label>}
 					name="action"
 					rules={[{ required: true, message: 'Chọn vai trò của người dùng!' }]}
 				>
@@ -250,7 +255,7 @@ export default function ModalCreate(props: any) {
 						type="primary"
 						htmlType="submit"
 						onClick={handleCancel}
-						style={{ marginRight: '10px', marginTop: '20px' }}
+						className="mr-[10px] mt-[20px]"
 					>
 						Hủy thao tác
 					</Button>

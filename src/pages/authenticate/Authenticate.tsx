@@ -12,7 +12,7 @@ import useAppLoading from '../../hook/useAppLoading';
 import { userLogin } from '../../service/auth/AuthService';
 import { userAction } from '../../reducer/userReducer';
 import { appAction } from '../../reducer/appReducer';
-
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setAccessToken, setUserAndPasswordLocal } from '../../helper/tokenHelper';
@@ -53,18 +53,18 @@ export default function Authenticate() {
 				dispatch(userAction.setUserLogin(res.data.data));
 				setAccessToken(res.data.data.accessToken);
 				setUserAndPasswordLocal(realParams);
-				message.success('Đăng nhập thành công !');
+				message.success(MessageConstantSuccess.loginSuccess);
 				navigate('/home');
 				setIsSpin(false);
 			})
 			.catch(error => {
 				console.log(error);
-				if (error.response.data.error.code == 'WRONG_USERNAME') {
-					message.error('Email hoặc tên đăng nhập không đúng, vui lòng kiểm tra lại!');
-				} else if (error.response.data.error.code == 'WRONG_PASSWORD') {
-					message.error('Mật khẩu không đúng, vui lòng kiểm tra lại!');
+				if (error.response.data.error.code === 'WRONG_USERNAME') {
+					message.error(MessageConstantError.emailError);
+				} else if (error.response.data.error.code === 'WRONG_PASSWORD') {
+					message.error(MessageConstantError.passwordError);
 				} else {
-					message.error('Đăng nhập thất bại!');
+					message.error(MessageConstantError.loginUnsuccess);
 				}
 				setIsWrongPass(true);
 				setIsSpin(false);
@@ -107,19 +107,14 @@ export default function Authenticate() {
 								name="password"
 								rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
 							>
-								<Input
+								<Input.Password
 									prefix={<LockOutlined style={{ marginRight: '10px' }} />}
 									placeholder="Mật Khẩu (*)"
 								/>
 							</Form.Item>
 
 							<Form.Item wrapperCol={{ offset: 32, span: 32 }}>
-								<Button
-									danger
-									type="primary"
-									htmlType="submit"
-									style={{ width: '100%', borderRadius: '10px' }}
-								>
+								<Button danger type="primary" htmlType="submit" className="w-full rounded-md">
 									ĐĂNG NHẬP
 								</Button>
 							</Form.Item>

@@ -15,16 +15,17 @@ import {
 	resetPasssUser,
 	updateUser,
 } from '../../service/user/UserService';
-
+import { useNavigate } from 'react-router-dom';
 import { EditOutlined, KeyOutlined, LikeOutlined, DislikeOutlined } from '@ant-design/icons';
+import { MessageConstantError, MessageConstantSuccess } from '../../constant/auth/auth.constant';
 
 export default function ModalEdit(props: any) {
+	const navigate = useNavigate();
 	const [formModalEdit] = Form.useForm();
-	const { isModalVisibleEdit, handleCancelEdit, handleOkEdit, userName } = props;
+	const { isModalVisibleEdit, handleCancelEdit, userName, userNameHyberLink } = props;
 	const [dataUserAll, setDataUserAll] = useState([]);
-	console.log(dataUserAll);
+
 	const onFinish = (values: any) => {
-		console.log(values);
 		const numberStaffEdit = values.staffEdit;
 		const data = dataUserAll
 			.filter((item: any) => {
@@ -35,11 +36,13 @@ export default function ModalEdit(props: any) {
 					return item;
 				}
 			});
+
 		const IDEdit = data.find((item, index) => {
 			if (numberStaffEdit == index) {
 				return item;
 			}
 		}).id;
+
 		const employeeIDEdit = data.find((item, index) => {
 			if (numberStaffEdit == index) {
 				return item;
@@ -50,7 +53,6 @@ export default function ModalEdit(props: any) {
 				return item;
 			}
 		}).userGroup.id;
-		console.log(data);
 
 		const params = {
 			id: IDEdit,
@@ -61,16 +63,12 @@ export default function ModalEdit(props: any) {
 		updateUser(params)
 			.then(res => {
 				console.log(res);
-				message.success('Cập nhật tài khoản người dùng thành công');
+				message.success(MessageConstantSuccess.updateUserSuccess);
+				navigate('/home');
 			})
 			.catch(err => {
 				console.log(err);
-				message.error('Cập nhật tài khoản người dùng thất bại');
-				// if (err.response.data.error.code == 'EMPLOYEE_ALREADY_HAS_AN_ACCOUNT') {
-				// 	message.error('Nhân viên đã có tài khoản');
-				// } else {
-				// 	message.error('Tạo mới tài khoản người dùng thất bại');
-				// }
+				message.error(MessageConstantError.updateUserUnsuccess);
 			});
 	};
 
@@ -80,20 +78,16 @@ export default function ModalEdit(props: any) {
 	const arrayValue = dataUserAll.map((item: any, index) => {
 		return item.userGroup.name;
 	});
+
 	if (!isModalVisibleEdit) {
 		formModalEdit.setFieldsValue({
 			staffEdit: '',
 			usernameEdit: '',
+			userName: '',
 			email: '',
 			action: '',
 		});
 	}
-	// else {
-	// 	formModalEdit.setFieldsValue({
-	// 		username: userName,
-	// 	});
-	// }
-
 	useEffect(() => {
 		getAllUser()
 			.then(res => {
@@ -104,7 +98,6 @@ export default function ModalEdit(props: any) {
 				console.log(err);
 			});
 	}, []);
-	console.log(userName);
 
 	return (
 		<Modal
@@ -112,6 +105,7 @@ export default function ModalEdit(props: any) {
 			//  onOk={handleOk}
 			onCancel={handleCancelEdit}
 			footer={null}
+			centered
 		>
 			<h1>CẬP NHẬT TÀI KHOẢN NGƯỜI DÙNG</h1>
 			<Form
@@ -125,7 +119,7 @@ export default function ModalEdit(props: any) {
 				autoComplete="off"
 			>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhân viên</label>}
+					label={<label className="font-semibold text-base">Nhân viên</label>}
 					name="staffEdit"
 					rules={[{ required: true, message: 'Vui lòng chọn nhân viên!' }]}
 				>
@@ -146,33 +140,11 @@ export default function ModalEdit(props: any) {
 					</Select>
 				</Form.Item>
 
-				<Form.Item
-					label={<label className="font-semibold text-[16px]">Tên đăng nhập</label>}
-					name="usernameEdit"
-					initialValue={userName}
-					// rules={[
-					// 	{
-					// 		validator(rule, value) {
-					// 			const check = /^[a-zA-Z0-9]+$/;
-					// 			// check if no store selected
-					// 			// const storeOther = productsFormValue[index]?.store_other;
-					// 			if (value == '' || value == undefined || value == null) {
-					// 				return Promise.reject(new Error('Vui lòng nhập tên đăng nhập!'));
-					// 			} else if (!check.test(value)) {
-					// 				return Promise.reject(
-					// 					new Error('Chỉ được phép nhập chữ và số, không nhập ký tự đặc biệt!'),
-					// 				);
-					// 			} else {
-					// 				return Promise.resolve();
-					// 			}
-					// 		},
-					// 	},
-					// ]}
-				>
-					<Input placeholder={userName} disabled />
+				<Form.Item label={<label className="font-semibold text-base">Tên đăng nhập</label>} name="usernameEdit">
+					<Input placeholder={userName || userNameHyberLink} disabled />
 				</Form.Item>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Email</label>}
+					label={<label className="font-semibold text-base">Email</label>}
 					name="email"
 					rules={[
 						{
@@ -193,7 +165,7 @@ export default function ModalEdit(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Vai trò của người dùng</label>}
+					label={<label className="font-semibold text-base">Vai trò của người dùng</label>}
 					name="action"
 					rules={[{ required: true, message: 'Chọn vai trò của người dùng!' }]}
 				>
