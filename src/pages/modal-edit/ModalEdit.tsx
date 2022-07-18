@@ -119,7 +119,7 @@ export default function ModalEdit(props: any) {
 				autoComplete="off"
 			>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhân viên</label>}
+					label={<label className="font-semibold text-base">Nhân viên</label>}
 					name="staffEdit"
 					rules={[{ required: true, message: 'Vui lòng chọn nhân viên!' }]}
 				>
@@ -140,14 +140,11 @@ export default function ModalEdit(props: any) {
 					</Select>
 				</Form.Item>
 
-				<Form.Item
-					label={<label className="font-semibold text-[16px]">Tên đăng nhập</label>}
-					name="usernameEdit"
-				>
+				<Form.Item label={<label className="font-semibold text-base">Tên đăng nhập</label>} name="usernameEdit">
 					<Input placeholder={userName || userNameHyberLink} disabled />
 				</Form.Item>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Email</label>}
+					label={<label className="font-semibold text-base">Email</label>}
 					name="email"
 					rules={[
 						{
@@ -168,7 +165,7 @@ export default function ModalEdit(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Vai trò của người dùng</label>}
+					label={<label className="font-semibold text-base">Vai trò của người dùng</label>}
 					name="action"
 					rules={[{ required: true, message: 'Chọn vai trò của người dùng!' }]}
 				>

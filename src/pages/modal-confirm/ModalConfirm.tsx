@@ -58,16 +58,17 @@ export default function ModalConfirm(props: any) {
 	return (
 		<div>
 			<Modal visible={isModalVisibleConfirm} centered onCancel={handleCancelConfirm} footer={null}>
-				<h1>
-					{statusUser == statusUserConfirm.active
-						? 'XÁC NHẬN VÔ HIỆU HÓA TÀI KHOẢN CỦA NGƯỜI DÙNG'
-						: 'XÁC NHẬN KÍCH HOẠT TÀI KHOẢN CỦA NGƯỜI DÙNG'}
-				</h1>
-				<p>
-					{statusUser == statusUserConfirm.active
-						? 'Bạn có chắc muốn vô hiệu hóa tài khoản của người dùng này'
-						: 'Bạn có chắc muốn kích hoạt tài khoản của người dùng này'}
-				</p>
+				{statusUser == statusUserConfirm.active ? (
+					<>
+						<h1>XÁC NHẬN VÔ HIỆU HÓA TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
+						<p>Bạn có chắc muốn vô hiệu hóa tài khoản của người dùng này</p>
+					</>
+				) : (
+					<>
+						<h1>XÁC NHẬN KÍCH HOẠT TÀI KHOẢN CỦA NGƯỜI DÙNG</h1>
+						<p>Bạn có chắc muốn kích hoạt tài khoản của người dùng này</p>
+					</>
+				)}
 				<div className="flex justify-end">
 					<Button onClick={handleCancelConfirm}>Không</Button>
 					<Button className="ml-2" onClick={handleContinue}>

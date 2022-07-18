@@ -1,10 +1,7 @@
 .list {
 	visibility: hidden;
-	// display: none;
+	box-shadow: 2px 5px 10px gray;
 }
-// .icon-down {
-// 	width: 50px;
-// }
 
 .button-down:hover .list {
 	visibility: visible;

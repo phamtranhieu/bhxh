@@ -123,7 +123,7 @@ export default function ModalCreate(props: any) {
 				autoComplete="off"
 			>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhân viên</label>}
+					label={<label className="font-semibold text-base">Nhân viên</label>}
 					name="staff"
 					rules={[{ required: true, message: 'Vui lòng chọn nhân viên!' }]}
 				>
@@ -147,7 +147,7 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Tên đăng nhập</label>}
+					label={<label className="font-semibold text-base">Tên đăng nhập</label>}
 					name="username"
 					rules={[
 						{
@@ -171,7 +171,7 @@ export default function ModalCreate(props: any) {
 					<Input />
 				</Form.Item>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Email</label>}
+					label={<label className="font-semibold text-base">Email</label>}
 					name="email"
 					rules={[
 						{
@@ -192,7 +192,7 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Mật khẩu</label>}
+					label={<label className="font-semibold text-base">Mật khẩu</label>}
 					name="password"
 					rules={[
 						{
@@ -214,7 +214,7 @@ export default function ModalCreate(props: any) {
 					<Input.Password />
 				</Form.Item>
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Nhập lại mật khẩu</label>}
+					label={<label className="font-semibold text-base">Nhập lại mật khẩu</label>}
 					name="rePassword"
 					rules={[
 						{
@@ -235,7 +235,7 @@ export default function ModalCreate(props: any) {
 				</Form.Item>
 
 				<Form.Item
-					label={<label className="font-semibold text-[16px]">Vai trò của người dùng</label>}
+					label={<label className="font-semibold text-base">Vai trò của người dùng</label>}
 					name="action"
 					rules={[{ required: true, message: 'Chọn vai trò của người dùng!' }]}
 				>
@@ -255,7 +255,7 @@ export default function ModalCreate(props: any) {
 						type="primary"
 						htmlType="submit"
 						onClick={handleCancel}
-						style={{ marginRight: '10px', marginTop: '20px' }}
+						className="mr-[10px] mt-[20px]"
 					>
 						Hủy thao tác
 					</Button>

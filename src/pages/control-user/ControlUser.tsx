@@ -95,6 +95,15 @@ export default function ControlStaff() {
 			title: 'STT',
 			dataIndex: 'key',
 			key: 'key',
+			render: (_, record) => (
+				<div
+					onClick={() => {
+						console.log(record);
+					}}
+				>
+					{record.key}
+				</div>
+			),
 		},
 		{
 			title: 'Tên đăng nhập',
@@ -107,7 +116,7 @@ export default function ControlStaff() {
 						setUserName('');
 						showModalEdit();
 					}}
-					style={{ color: 'blue' }}
+					className="text-[blue] "
 				>
 					{record.name}
 				</div>
@@ -122,6 +131,16 @@ export default function ControlStaff() {
 			title: 'Email',
 			key: 'email',
 			dataIndex: 'email',
+			render: (_, record) => (
+				<div
+					onClick={() => {
+						console.log(record);
+					}}
+					className="md:flex-1"
+				>
+					{record.email}
+				</div>
+			),
 		},
 		{
 			title: 'Vai trò người dùng',
@@ -262,21 +281,6 @@ export default function ControlStaff() {
 		};
 	});
 
-	// useEffect(() => {
-	// 	inforUserPagination(numberPage, sizePage, filterSearch, sortActive, groupUserID)
-	// 		.then(res => {
-	// 			console.log(res);
-	// 			setDataUser(res.data.data.items);
-	// 		})
-	// 		.catch(err => {
-	// 			console.log(err);
-	// 		});
-	// }, [numberPage, sizePage, filterSearch, sortActive, groupUserID]);
-	// const objParams = {
-	// 	searchKey: filterSearch,
-	// 	status: sortActive,
-	// 	groupUserIDWeb: groupUserID,
-	// };
 	useEffect(() => {
 		inforUserPagination(numberPage, sizePage, objParams)
 			.then(res => {
@@ -356,13 +360,12 @@ export default function ControlStaff() {
 	return (
 		<>
 			<div>
-				<div>
+				<div className="md:hidden">
 					<Form name="basic" initialValues={{ remember: true }} autoComplete="off">
 						<div className="flex justify-between">
-							<Form.Item name="search">
+							<Form.Item name="search" className="w-96">
 								<Input
 									placeholder="Tìm kiếm theo tên đăng nhập, email, nhân viên"
-									style={{ width: '400px' }}
 									onChange={handleChange}
 								/>
 							</Form.Item>
@@ -370,15 +373,10 @@ export default function ControlStaff() {
 						</div>
 						<div className="flex">
 							<div className="mr-5">
-								<p className="text-[16px] font-semibold">Trạng thái</p>
-								<Form.Item
-									name="status"
-									rules={[{ required: true, message: 'Please input your username!' }]}
-									initialValue="Tất cả"
-								>
+								<p className="text-base font-semibold">Trạng thái</p>
+								<Form.Item name="status" initialValue="Tất cả" className="w-40">
 									<Select
-										style={{ width: '150px' }}
-										className="w-[150px]"
+										className="w-40"
 										onChange={e => {
 											handleChangeStatus(e);
 										}}
@@ -390,18 +388,20 @@ export default function ControlStaff() {
 								</Form.Item>
 							</div>
 							<div>
-								<p className="text-[16px] font-semibold">Vai trò của người dùng</p>
-								<Select
-									defaultValue={'Tất cả'}
-									className="w-[150px]"
-									onChange={e => {
-										handleChangeFunctionUser(e);
-									}}
-								>
-									{functionUser.map((item: any, index: number) => {
-										return <Option key={index}>{item.name}</Option>;
-									})}
-								</Select>
+								<p className="text-base font-semibold">Vai trò của người dùng</p>
+								<Form.Item name="status" initialValue="Tất cả" className="w-40">
+									<Select
+										defaultValue={'Tất cả'}
+										className="w-40"
+										onChange={e => {
+											handleChangeFunctionUser(e);
+										}}
+									>
+										{functionUser.map((item: any, index: number) => {
+											return <Option key={index}>{item.name}</Option>;
+										})}
+									</Select>
+								</Form.Item>
 							</div>
 						</div>
 					</Form>
@@ -416,7 +416,7 @@ export default function ControlStaff() {
 						defaultCurrent={1}
 						total={lengthArrayAllUser}
 						defaultPageSize={6}
-						style={{ display: 'flex', justifyContent: 'end' }}
+						className="flex justify-end md:hidden"
 					/>
 				</div>
 			</div>

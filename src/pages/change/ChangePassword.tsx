@@ -53,10 +53,7 @@ export default function ChangePassword() {
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
 				autoComplete="off"
-				style={{
-					width: '100%',
-				}}
-				className="flex justify-between"
+				className="flex justify-between w-full"
 			>
 				<div className="w-[600px]">
 					<Form.Item

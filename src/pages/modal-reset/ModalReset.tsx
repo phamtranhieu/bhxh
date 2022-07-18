@@ -125,19 +125,13 @@ export default function ModalReset(props: any) {
 				>
 					<Form.Item
 						label={
-							<label className="font-semibold text-[16px] text-left">
-								Mật khẩu mới cho tài khoản này
-							</label>
+							<label className="font-semibold text-base text-left">Mật khẩu mới cho tài khoản này</label>
 						}
 						name="resetPassword"
 					>
 						<Input />
 					</Form.Item>
-					<Form.Item
-						style={{ marginTop: '10px' }}
-						className="flex justify-end mt-5"
-						wrapperCol={{ offset: 8, span: 16 }}
-					>
+					<Form.Item className="flex justify-end mt-5" wrapperCol={{ offset: 8, span: 16 }}>
 						<Button className="w-[100px]">Đóng</Button>
 						<Button className="w-[100px] ml-5" type="primary" htmlType="submit">
 							Sao chép

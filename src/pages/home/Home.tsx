@@ -111,41 +111,24 @@ export default function Home() {
 		// <div>
 		<Layout className="">
 			<Header className="header flex items-center w-full justify-between h-[200px]">
-				<div className="flex items-center">
+				<div className="flex items-center text-white ">
 					<UserOutlined
 						onClick={() => {
 							navigate('/home');
 						}}
-						style={{ color: 'white', marginRight: '20px' }}
+						className="mr-[20px]"
 					/>
 					<p className="text-white mb-0 title">NỀN TẢNG BẢO TRÌ MÁY MÓC THIẾT BỊ</p>
 				</div>
-				<div className="flex items-center ">
-					<BellOutlined style={{ color: 'white', marginRight: '20px' }} />
+				<div className="flex items-center text-white mr-[20px] ">
+					<BellOutlined className=" mr-[20px]" />
 					<div className="relative button-down p-[20px] flex justify-center items-center">
-						<DownOutlined style={{ color: 'white' }} />
-						<ul
-							className="list"
-							style={{
-								color: 'white',
-								backgroundColor: 'white',
-								position: 'absolute',
-								boxShadow: '2px 5px 10px gray',
-								width: '85px',
-								top: '50px',
-								left: '-45px',
-							}}
-						>
-							<li
-								style={{ color: 'black', textAlign: 'center', height: '50px', lineHeight: '50px' }}
-								onClick={handleChangePass}
-							>
+						<DownOutlined className="text-white" />
+						<ul className="list text-white bg-white absolute w-[85px] top-[50px] left-[-45px]">
+							<li className="text-[black] text-center h-[50px] leading-10" onClick={handleChangePass}>
 								Đổi mật khẩu
 							</li>
-							<li
-								style={{ color: 'black', textAlign: 'center', height: '50px', lineHeight: '50px' }}
-								onClick={handleLogout}
-							>
+							<li className=" text-[black] text-center h-[50px] leading-10" onClick={handleLogout}>
 								Đăng xuất
 							</li>
 						</ul>
@@ -153,32 +136,16 @@ export default function Home() {
 				</div>
 			</Header>
 			<div className="w-full h-[50px] text-[20px] font-semibold flex items-center ml-5">TRANG CHỦ</div>
-			<Layout style={{ height: '100%', backgroundColor: 'gray', padding: '5px' }}>
-				<Sider width={200} className="site-layout-background ">
-					<Menu
-						mode="inline"
-						key={uuid}
-						// defaultSelectedKeys={['1']}
-						// defaultOpenKeys={['QUẢN LÝ TÀI KH']}
-						style={{ height: '100%', borderRight: 0 }}
-						items={items}
-						onClick={onClick}
-					/>
+			<Layout className="h-full bg-[gray] p-[5px]">
+				<Sider width={200} className="site-layout-background lg:hidden">
+					<Menu mode="inline" key={uuid} className="h-full border-r-0 " items={items} onClick={onClick} />
 				</Sider>
-				<Layout style={{ padding: '0 24px 24px', backgroundColor: 'white', marginLeft: '5px' }}>
-					<Content
-						className="site-layout-background"
-						style={{
-							padding: 24,
-							margin: 0,
-							minHeight: 280,
-						}}
-					>
+				<Layout className="p-[0 24px 24px] ml-[5px]" style={{ backgroundColor: 'white' }}>
+					<Content className="site-layout-background p-[24px] m-0 min-h-[280px]">
 						<Outlet />
 					</Content>
 				</Layout>
 			</Layout>
 		</Layout>
-		// </div>
 	);
 }

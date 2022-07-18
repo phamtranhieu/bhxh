@@ -114,12 +114,7 @@ export default function Authenticate() {
 							</Form.Item>
 
 							<Form.Item wrapperCol={{ offset: 32, span: 32 }}>
-								<Button
-									danger
-									type="primary"
-									htmlType="submit"
-									style={{ width: '100%', borderRadius: '10px' }}
-								>
+								<Button danger type="primary" htmlType="submit" className="w-full rounded-md">
 									ĐĂNG NHẬP
 								</Button>
 							</Form.Item>
