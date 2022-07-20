@@ -14,6 +14,7 @@ import ChangePassword from './pages/change/ChangePassword';
 import ControlUser from './pages/control-user/ControlUser';
 import RoleUser from './pages/role-user/RoleUser';
 import CreateUserGroup from './pages/create-group/CreateUserGroup';
+import Ex from './pages/ex/ex';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -27,6 +28,7 @@ root.render(
 						<Route path="control-user" element={<ControlUser />} />
 						<Route path="role-user" element={<RoleUser />} />
 						<Route path="create-group-user" element={<CreateUserGroup />} />
+						<Route path="ex" element={<Ex />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

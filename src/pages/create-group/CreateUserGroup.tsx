@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Button, Form, Input, Checkbox, Select } from 'antd';
+import { Button, Form, Input, Checkbox, Select, Space } from 'antd';
 import {
 	getAllFunctionGroupUser,
 	getCreateConfigGroup,
@@ -10,6 +10,7 @@ import {
 import { DisabledContextProvider } from 'antd/lib/config-provider/DisabledContext';
 import { GroupItemType, ItemChildType, ItemConfig } from '../../interface/group/UserGroupType';
 import { titleFunction } from '../../service/group/DataUserService';
+import { EditOutlined, MinusCircleOutlined, PlusOutlined, DislikeOutlined } from '@ant-design/icons';
 
 export default function CreateUserGroup() {
 	const { Option } = Select;
@@ -93,118 +94,15 @@ export default function CreateUserGroup() {
 		setValueChecked(e.target.checked);
 	};
 
-	const handleChangeData = (indexChild: number, indexSearch: number, e: any) => {
-		const itemCatalog: any = dataUserGroup.find((item: GroupItemType, index: number) => {
-			return indexSearch == index;
-		});
-		console.log(itemCatalog.id);
-		const idItemChildCatalog = itemCatalog.features.find((item: any, index: any) => {
-			if (indexChild == index) {
-				return item;
-			}
-		});
-		const inforItemCatalog: any = dataConfig?.find((item: ItemConfig, index: number) => {
-			if (e == index) {
-				return item;
-			}
-		});
-		console.log(inforItemCatalog);
-		console.log(idItemChildCatalog.id);
-		const objDataPermiss = {
-			key: inforItemCatalog.key,
-			value: inforItemCatalog.value,
-			displayText: inforItemCatalog.displayText,
-			group: inforItemCatalog.group,
-			order: inforItemCatalog.order,
-		};
-	};
-
-	const handleChangeCreate = (indexChild: number, indexSearch: number, e: any) => {
-		const itemCatalog: any = dataUserGroup.find((item: GroupItemType, index: number) => {
-			return indexSearch == index;
-		});
-		console.log(itemCatalog.id);
-		const idItemChildCatalog = itemCatalog.features.find((item: any, index: any) => {
-			if (indexChild == index) {
-				return item;
-			}
-		});
-		const inforItemCatalog: any = createConfig?.find((item: ItemConfig, index: number) => {
-			if (e == index) {
-				return item;
-			}
-		});
-		console.log(inforItemCatalog);
-		console.log(idItemChildCatalog.id);
-		const objCreatePermiss = {
-			key: inforItemCatalog.key,
-			value: inforItemCatalog.value,
-			displayText: inforItemCatalog.displayText,
-			group: inforItemCatalog.group,
-			order: inforItemCatalog.order,
-		};
-	};
-	const handleChangeManager = (indexChild: number, indexSearch: number, e: any) => {
-		const itemCatalog: any = dataUserGroup.find((item: GroupItemType, index: number) => {
-			return indexSearch == index;
-		});
-		console.log(itemCatalog.id);
-		const idItemChildCatalog = itemCatalog.features.find((item: any, index: any) => {
-			if (indexChild == index) {
-				return item;
-			}
-		});
-		const inforItemCatalog: any = createConfig?.find((item: ItemConfig, index: number) => {
-			if (e == index) {
-				return item;
-			}
-		});
-		console.log(inforItemCatalog);
-		console.log(idItemChildCatalog.id);
-		const objManagerPermiss = {
-			key: inforItemCatalog.key,
-			value: inforItemCatalog.value,
-			displayText: inforItemCatalog.displayText,
-			group: inforItemCatalog.group,
-			order: inforItemCatalog.order,
-		};
-	};
-	const handleChangeModifier = (indexChild: number, indexSearch: number, e: any) => {
-		const itemCatalog: any = dataUserGroup.find((item: GroupItemType, index: number) => {
-			return indexSearch == index;
-		});
-		console.log(itemCatalog.id);
-		const idItemChildCatalog = itemCatalog.features.find((item: any, index: any) => {
-			if (indexChild == index) {
-				return item;
-			}
-		});
-		const inforItemCatalog: any = createConfig?.find((item: ItemConfig, index: number) => {
-			if (e == index) {
-				return item;
-			}
-		});
-		console.log(inforItemCatalog);
-		console.log(idItemChildCatalog.id);
-		const objModifierPermiss = {
-			key: inforItemCatalog.key,
-			value: inforItemCatalog.value,
-			displayText: inforItemCatalog.displayText,
-			group: inforItemCatalog.group,
-			order: inforItemCatalog.order,
-		};
-	};
-
 	return (
 		<div>
 			<Form
-				name="basic"
 				labelCol={{ span: 8 }}
-				wrapperCol={{ span: 8 }}
-				initialValues={{ remember: true }}
+				wrapperCol={{ span: 32 }}
+				name="dynamic_form_nest_item"
 				onFinish={onFinish}
-				onFinishFailed={onFinishFailed}
 				autoComplete="off"
+				initialValues={{ dataUsers: [''] }}
 			>
 				<div className="flex justify-between mb-5">
 					<h1>TẠO MỚI VAI TRÒ CỦA NGƯỜI DÙNG</h1>
@@ -241,57 +139,139 @@ export default function CreateUserGroup() {
 								<div key={index}>
 									<h1 className="mb-5">{item.description}</h1>
 									{item.features.map((itemChild: ItemChildType, indexChild: number) => {
+										console.log(itemChild);
 										return (
-											<div className="flex justify-between items-center " key={indexChild}>
-												<p className="mb-5 ml-5 w-[150px]">{itemChild.description}</p>
-												<Select
-													className="w-[150px]"
-													defaultValue={defaultData}
-													disabled={valueChecked}
-													onChange={e => {
-														handleChangeData(indexChild, index, e);
-													}}
-												>
-													{dataConfig.map((item: ItemConfig, index) => {
-														return <Option key={index}>{item.displayText}</Option>;
-													})}
-												</Select>
-												<Select
-													className="w-[150px]"
-													defaultValue={defaultCreate}
-													disabled={valueChecked}
-													onChange={e => {
-														handleChangeCreate(indexChild, index, e);
-													}}
-												>
-													{createConfig.map((item: ItemConfig, index) => {
-														return <Option key={index}>{item.displayText}</Option>;
-													})}
-												</Select>
-												<Select
-													className="w-[150px]"
-													defaultValue={defaultModifier}
-													disabled={valueChecked}
-													onChange={e => {
-														handleChangeModifier(indexChild, index, e);
-													}}
-												>
-													{modifierConfig.map((item: ItemConfig, index) => {
-														return <Option key={index}>{item.displayText}</Option>;
-													})}
-												</Select>
-												<Select
-													className="w-[150px]"
-													defaultValue={defaultManager}
-													disabled={valueChecked}
-													onChange={e => {
-														handleChangeManager(indexChild, index, e);
-													}}
-												>
-													{managerConfig.map((item: ItemConfig, index) => {
-														return <Option key={index}>{item.displayText}</Option>;
-													})}
-												</Select>
+											<div className="flex items-center " key={indexChild}>
+												<div>
+													<p className="mb-5 ml-5 w-[150px]">{itemChild.description}</p>
+												</div>
+												<Form.List name="dataUsers">
+													{(fields, { add, remove }) => (
+														<>
+															{fields.map(({ key, name, ...restField }) => (
+																<Space
+																	key={indexChild}
+																	style={{
+																		display: 'flex',
+																		marginBottom: 8,
+																		marginLeft: '150px',
+																	}}
+																	align="baseline"
+																	className="flex justify-between w-full "
+																>
+																	<Form.Item
+																		{...restField}
+																		name={[name, 'dataPermission']}
+																		rules={[
+																			{
+																				required: true,
+																				message: 'Missing first name',
+																			},
+																		]}
+																		className="w-[150px]"
+																	>
+																		<Select
+																			className="w-full"
+																			defaultValue={defaultData}
+																			disabled={valueChecked}
+																		>
+																			{dataConfig.map(
+																				(item: ItemConfig, index) => {
+																					return (
+																						<Option key={index}>
+																							{item.displayText}
+																						</Option>
+																					);
+																				},
+																			)}
+																		</Select>
+																	</Form.Item>
+																	<Form.Item
+																		{...restField}
+																		name={[name, 'createPermission']}
+																		rules={[
+																			{
+																				required: true,
+																				message: 'Missing last name',
+																			},
+																		]}
+																		className="w-[150px]"
+																	>
+																		<Select
+																			className="w-[150px]"
+																			defaultValue={defaultData}
+																			disabled={valueChecked}
+																		>
+																			{dataConfig.map(
+																				(item: ItemConfig, index) => {
+																					return (
+																						<Option key={index}>
+																							{item.displayText}
+																						</Option>
+																					);
+																				},
+																			)}
+																		</Select>
+																	</Form.Item>
+																	<Form.Item
+																		{...restField}
+																		name={[name, 'modifierPermission']}
+																		rules={[
+																			{
+																				required: true,
+																				message: 'Missing last name',
+																			},
+																		]}
+																		className="w-[150px]"
+																	>
+																		<Select
+																			className="w-[150px]"
+																			defaultValue={defaultData}
+																			disabled={valueChecked}
+																		>
+																			{dataConfig.map(
+																				(item: ItemConfig, index) => {
+																					return (
+																						<Option key={index}>
+																							{item.displayText}
+																						</Option>
+																					);
+																				},
+																			)}
+																		</Select>
+																	</Form.Item>
+																	<Form.Item
+																		{...restField}
+																		name={[name, 'managerPermission']}
+																		rules={[
+																			{
+																				required: true,
+																				message: 'Missing last name',
+																			},
+																		]}
+																		className="w-[150px]"
+																	>
+																		<Select
+																			className="w-[150px]"
+																			defaultValue={defaultData}
+																			disabled={valueChecked}
+																		>
+																			{dataConfig.map(
+																				(item: ItemConfig, index) => {
+																					return (
+																						<Option key={index}>
+																							{item.displayText}
+																						</Option>
+																					);
+																				},
+																			)}
+																		</Select>
+																	</Form.Item>
+																</Space>
+															))}
+														</>
+													)}
+												</Form.List>
 											</div>
 										);
 									})}
