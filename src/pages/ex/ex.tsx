@@ -34,7 +34,7 @@ export default function ex() {
 									<Space key={index} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
 										<Form.Item
 											// {...restField}
-											name={[field.name, 'first']}
+											name={[field, 'first']}
 											className="w-[150px]"
 											// rules={[{ required: true, message: 'Missing first name' }]}
 										>
@@ -52,7 +52,7 @@ export default function ex() {
 										</Form.Item>
 										<Form.Item
 											// {...restField}
-											name={[field.name, 'last']}
+											name={[field, 'last']}
 											className="w-[150px]"
 											// rules={[{ required: true, message: 'Missing last name' }]}
 										>
@@ -70,7 +70,7 @@ export default function ex() {
 										</Form.Item>
 										<Form.Item
 											// {...restField}
-											name={[field.name, 'hieu']}
+											name={[field, 'hieu']}
 											className="w-[150px]"
 											// rules={[{ required: true, message: 'Missing last name' }]}
 										>
@@ -88,7 +88,7 @@ export default function ex() {
 										</Form.Item>
 										<Form.Item
 											// {...restField}
-											name={[field.name, 'nhu']}
+											name={[field, 'nhu']}
 											className="w-[150px]"
 											// rules={[{ required: true, message: 'Missing last name' }]}
 										>
