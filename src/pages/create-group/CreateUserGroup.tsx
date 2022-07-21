@@ -70,6 +70,10 @@ export default function CreateUserGroup() {
 		console.log('Success:', values);
 	};
 
+	const onFinished = (values: any) => {
+		console.log('Success:', values);
+	};
+
 	const onFinishFailed = (errorInfo: any) => {
 		console.log('Failed:', errorInfo);
 	};
@@ -133,151 +137,8 @@ export default function CreateUserGroup() {
 							return <p>{item.title}</p>;
 						})}
 					</div>
-					<div className="mt-5">
-						{dataUserGroup.map((item: GroupItemType, index: number) => {
-							return (
-								<div key={index}>
-									<h1 className="mb-5">{item.description}</h1>
-									{item.features.map((itemChild: ItemChildType, indexChild: number) => {
-										console.log(itemChild);
-										return (
-											<div className="flex items-center " key={indexChild}>
-												<div>
-													<p className="mb-5 ml-5 w-[150px]">{itemChild.description}</p>
-												</div>
-												<Form.List name="dataUsers">
-													{(fields, { add, remove }) => (
-														<>
-															{fields.map(({ key, name, ...restField }) => (
-																<Space
-																	key={indexChild}
-																	style={{
-																		display: 'flex',
-																		marginBottom: 8,
-																		marginLeft: '150px',
-																	}}
-																	align="baseline"
-																	className="flex justify-between w-full "
-																>
-																	<Form.Item
-																		{...restField}
-																		name={[name, 'dataPermission']}
-																		rules={[
-																			{
-																				required: true,
-																				message: 'Missing first name',
-																			},
-																		]}
-																		className="w-[150px]"
-																	>
-																		<Select
-																			className="w-full"
-																			defaultValue={defaultData}
-																			disabled={valueChecked}
-																		>
-																			{dataConfig.map(
-																				(item: ItemConfig, index) => {
-																					return (
-																						<Option key={index}>
-																							{item.displayText}
-																						</Option>
-																					);
-																				},
-																			)}
-																		</Select>
-																	</Form.Item>
-																	<Form.Item
-																		{...restField}
-																		name={[name, 'createPermission']}
-																		rules={[
-																			{
-																				required: true,
-																				message: 'Missing last name',
-																			},
-																		]}
-																		className="w-[150px]"
-																	>
-																		<Select
-																			className="w-[150px]"
-																			defaultValue={defaultData}
-																			disabled={valueChecked}
-																		>
-																			{dataConfig.map(
-																				(item: ItemConfig, index) => {
-																					return (
-																						<Option key={index}>
-																							{item.displayText}
-																						</Option>
-																					);
-																				},
-																			)}
-																		</Select>
-																	</Form.Item>
-																	<Form.Item
-																		{...restField}
-																		name={[name, 'modifierPermission']}
-																		rules={[
-																			{
-																				required: true,
-																				message: 'Missing last name',
-																			},
-																		]}
-																		className="w-[150px]"
-																	>
-																		<Select
-																			className="w-[150px]"
-																			defaultValue={defaultData}
-																			disabled={valueChecked}
-																		>
-																			{dataConfig.map(
-																				(item: ItemConfig, index) => {
-																					return (
-																						<Option key={index}>
-																							{item.displayText}
-																						</Option>
-																					);
-																				},
-																			)}
-																		</Select>
-																	</Form.Item>
-																	<Form.Item
-																		{...restField}
-																		name={[name, 'managerPermission']}
-																		rules={[
-																			{
-																				required: true,
-																				message: 'Missing last name',
-																			},
-																		]}
-																		className="w-[150px]"
-																	>
-																		<Select
-																			className="w-[150px]"
-																			defaultValue={defaultData}
-																			disabled={valueChecked}
-																		>
-																			{dataConfig.map(
-																				(item: ItemConfig, index) => {
-																					return (
-																						<Option key={index}>
-																							{item.displayText}
-																						</Option>
-																					);
-																				},
-																			)}
-																		</Select>
-																	</Form.Item>
-																</Space>
-															))}
-														</>
-													)}
-												</Form.List>
-											</div>
-										);
-									})}
-								</div>
-							);
-						})}
+					<div className="mt-5 flex">
+						<div></div>
 					</div>
 				</div>
 			</Form>
