@@ -28,15 +28,10 @@ export default function ex() {
 				<Form.List name="users">
 					{(fields, { add, remove }) => (
 						<>
-							{fields.map((field, index) => {
-								console.log(fields);
-								console.log(index);
+							{fields.map((field: any, index) => {
+								console.log(field);
 								return (
-									<Space
-										//  key={key}
-										style={{ display: 'flex', marginBottom: 8 }}
-										align="baseline"
-									>
+									<Space key={index} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
 										<Form.Item
 											// {...restField}
 											name={[field.name, 'first']}
