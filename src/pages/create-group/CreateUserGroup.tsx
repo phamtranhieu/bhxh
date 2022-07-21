@@ -138,7 +138,109 @@ export default function CreateUserGroup() {
 						})}
 					</div>
 					<div className="mt-5 flex">
-						<div></div>
+						<div>
+							<Form.List name="dataUsers">
+								{(fields, { add, remove }) => (
+									<>
+										{fields.map((field: any, index) => {
+											return dataUserGroup.map((item: any, index: number) => {
+												return (
+													<div key={index}>
+														<h1>{item.description}</h1>
+														{item.features.map((item: any, indexChild: number) => {
+															console.log(indexChild);
+															return (
+																<div className="flex">
+																	<p>{item.description}</p>
+																	<Space
+																		// key={key}
+																		style={{ display: 'flex', marginBottom: 8 }}
+																		align="baseline"
+																	>
+																		<Form.Item
+																			// {...restField}
+																			name={[indexChild, 'first']}
+																			className="w-[150px]"
+																			// rules={[{ required: true, message: 'Missing first name' }]}
+																		>
+																			<Select className="w-full">
+																				<Option key="1" value="1">
+																					1
+																				</Option>
+																				<Option key="2" value="2">
+																					2
+																				</Option>
+																				<Option key="3" value="3">
+																					3
+																				</Option>
+																			</Select>
+																		</Form.Item>
+																		<Form.Item
+																			// {...restField}
+																			name={[indexChild, 'last']}
+																			className="w-[150px]"
+																			// rules={[{ required: true, message: 'Missing last name' }]}
+																		>
+																			<Select className="w-full">
+																				<Option key="1" value="1">
+																					1
+																				</Option>
+																				<Option key="2" value="2">
+																					2
+																				</Option>
+																				<Option key="3" value="3">
+																					3
+																				</Option>
+																			</Select>
+																		</Form.Item>
+																		<Form.Item
+																			// {...restField}
+																			name={[indexChild, 'hieu']}
+																			className="w-[150px]"
+																			// rules={[{ required: true, message: 'Missing last name' }]}
+																		>
+																			<Select className="w-full">
+																				<Option key="1" value="1">
+																					1
+																				</Option>
+																				<Option key="2" value="2">
+																					2
+																				</Option>
+																				<Option key="3" value="3">
+																					3
+																				</Option>
+																			</Select>
+																		</Form.Item>
+																		<Form.Item
+																			// {...restField}
+																			name={[indexChild, 'nhu']}
+																			className="w-[150px]"
+																			// rules={[{ required: true, message: 'Missing last name' }]}
+																		>
+																			<Select className="w-[150px]">
+																				<Option key="1" value="1">
+																					1
+																				</Option>
+																				<Option key="2" value="2">
+																					2
+																				</Option>
+																				<Option key="3" value="3">
+																					3
+																				</Option>
+																			</Select>
+																		</Form.Item>
+																	</Space>
+																</div>
+															);
+														})}
+													</div>
+												);
+											});
+										})}
+									</>
+								)}
+							</Form.List>
+						</div>
 					</div>
 				</div>
 			</Form>
