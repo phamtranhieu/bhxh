@@ -1,6 +1,7 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { isTemplateMiddleOrTemplateTail } from 'typescript';
 import { getAllFunctionGroupUser } from '../../service/group/GroupUserService';
 
 const { Option } = Select;
@@ -23,14 +24,14 @@ export default function ex() {
 	return (
 		<div>
 			<Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off" initialValues={{ users: [''] }}>
-				{dataFunction.map((item: any, index: number) => {
-					return (
+				<Form.List name="users">
+					{(fields, { add, remove }) => (
 						<>
-							<h1>{item.description}</h1>
-							<Form.List name="users">
-								{(fields, { add, remove }) => (
-									<>
-										{fields.map(({ key, name, ...restField }) => (
+							{fields.map(({ key, name, ...restField }) => {
+								return dataFunction.map((item: any, index) => {
+									return (
+										<>
+											<h1>{item.description}</h1>
 											<Space
 												key={key}
 												style={{ display: 'flex', marginBottom: 8 }}
@@ -109,13 +110,14 @@ export default function ex() {
 													</Select>
 												</Form.Item>
 											</Space>
-										))}
-									</>
-								)}
-							</Form.List>
+										</>
+									);
+								});
+							})}
 						</>
-					);
-				})}
+					)}
+				</Form.List>
+
 				<Form.Item>
 					<Button className="ml-5" type="primary" htmlType="submit">
 						Lưu thông tin
