@@ -20,7 +20,7 @@ export default function CreateUserGroup() {
 	const [modifierConfig, setModifierConfig] = useState([]);
 	const [managerConfig, setManagerConfig] = useState([]);
 	const [valueChecked, setValueChecked] = useState<boolean>(false);
-
+	console.log(dataUserGroup);
 	const [dataPermiss, setDataPermiss] = useState({});
 
 	useEffect(() => {
@@ -82,22 +82,47 @@ export default function CreateUserGroup() {
 		return { display: item.displayText, value: item.value };
 	})[1]?.display;
 
+	const defaultValueData = dataConfig.map((item: ItemConfig) => {
+		return { display: item.displayText, value: item.value };
+	})[1]?.value;
+
 	const defaultCreate = createConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
 	})[1]?.display;
+
+	const defaultValueCreate = createConfig.map((item: ItemConfig) => {
+		return { display: item.displayText, value: item.value };
+	})[1]?.value;
 
 	const defaultModifier = modifierConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
 	})[1]?.display;
 
+	const defaultValueModifier = modifierConfig.map((item: ItemConfig) => {
+		return { display: item.displayText, value: item.value };
+	})[1]?.value;
+
 	const defaultManager = managerConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
 	})[1]?.display;
 
+	const defaultValueManager = managerConfig.map((item: ItemConfig) => {
+		return { display: item.displayText, value: item.value };
+	})[1]?.value;
+
 	const handleChecked = (e: any) => {
 		setValueChecked(e.target.checked);
 	};
+	console.log(dataConfig);
 
+	const handleChange = (indexDadGet: string, indexChildGet: string) => {
+		console.log(indexDadGet);
+		console.log(indexChildGet);
+
+		// if () {
+
+		// }
+	};
 	return (
 		<div>
 			<Form
@@ -137,101 +162,193 @@ export default function CreateUserGroup() {
 							return <p>{item.title}</p>;
 						})}
 					</div>
-					<div className="mt-5 flex">
-						<div>
+					<div className="mt-5 flex w-full">
+						<div className="w-full">
 							<Form.List name="groupDataUsers">
 								{(fields, { add, remove }) => (
 									<>
 										{dataUserGroup.map((itemDad: any, indexDad) => {
 											return (
-												<Form.Item name={[indexDad, 'id']}>
+												<Form.Item>
 													<h1>{itemDad.description}</h1>
-													<Form.List name="dataUsers">
+													<Form.List name={[indexDad, 'dataUsers']}>
 														{(fields, { add, remove }) => (
 															<>
 																{itemDad.features.map(
 																	(item: any, indexChild: number) => {
 																		return (
 																			<div className="flex">
-																				<p>{item.description}</p>
+																				<p className="w-[200px]">
+																					{item.description}
+																				</p>
 																				<Space
-																					// key={indexDad}
 																					style={{
 																						display: 'flex',
 																						marginBottom: 8,
+																						marginLeft: '10rem',
 																					}}
+																					className="w-full flex justify-between"
 																					align="baseline"
 																				>
 																					<Form.Item
-																						// {...restField}
-																						name={[indexChild, 'first']}
+																						name={[
+																							indexChild,
+																							'dataPermission',
+																						]}
 																						className="w-[150px]"
-																						// rules={[{ required: true, message: 'Missing first name' }]}
+																						initialValue={defaultValueData}
 																					>
-																						<Select className="w-full">
-																							<Option key="1" value="1">
-																								1
-																							</Option>
-																							<Option key="2" value="2">
-																								2
-																							</Option>
-																							<Option key="3" value="3">
-																								3
-																							</Option>
+																						<Select
+																							className="w-full"
+																							defaultValue={
+																								defaultValueData
+																							}
+																							// placeholder={defaultData}
+																							onChange={() => {
+																								handleChange(
+																									itemDad.id,
+																									item.id,
+																								);
+																							}}
+																						>
+																							{dataConfig.map(
+																								(
+																									itemData: any,
+																									indexData: number,
+																								) => {
+																									return (
+																										<Option
+																											key={
+																												indexData
+																											}
+																											value={
+																												itemData.value
+																											}
+																										>
+																											{
+																												itemData.displayText
+																											}
+																										</Option>
+																									);
+																								},
+																							)}
 																						</Select>
 																					</Form.Item>
 																					<Form.Item
-																						// {...restField}
-																						name={[indexChild, 'last']}
+																						name={[
+																							indexChild,
+																							'createPermission',
+																						]}
 																						className="w-[150px]"
-																						// rules={[{ required: true, message: 'Missing last name' }]}
+																						initialValue={
+																							defaultValueCreate
+																						}
 																					>
-																						<Select className="w-full">
-																							<Option key="1" value="1">
-																								1
-																							</Option>
-																							<Option key="2" value="2">
-																								2
-																							</Option>
-																							<Option key="3" value="3">
-																								3
-																							</Option>
+																						<Select
+																							className="w-full"
+																							defaultValue={
+																								defaultValueCreate
+																							}
+																						>
+																							{createConfig.map(
+																								(
+																									itemCreate: any,
+																									indexCreate: number,
+																								) => {
+																									return (
+																										<Option
+																											key={
+																												indexCreate
+																											}
+																											value={
+																												itemCreate.value
+																											}
+																										>
+																											{
+																												itemCreate.displayText
+																											}
+																										</Option>
+																									);
+																								},
+																							)}
 																						</Select>
 																					</Form.Item>
 																					<Form.Item
-																						// {...restField}
-																						name={[indexChild, 'hieu']}
+																						name={[
+																							indexChild,
+																							'modifierPermission',
+																						]}
 																						className="w-[150px]"
-																						// rules={[{ required: true, message: 'Missing last name' }]}
+																						initialValue={
+																							defaultValueModifier
+																						}
 																					>
-																						<Select className="w-full">
-																							<Option key="1" value="1">
-																								1
-																							</Option>
-																							<Option key="2" value="2">
-																								2
-																							</Option>
-																							<Option key="3" value="3">
-																								3
-																							</Option>
+																						<Select
+																							className="w-full"
+																							defaultValue={
+																								defaultValueModifier
+																							}
+																						>
+																							{modifierConfig.map(
+																								(
+																									itemModifier: any,
+																									indexModifier: number,
+																								) => {
+																									return (
+																										<Option
+																											key={
+																												indexModifier
+																											}
+																											value={
+																												itemModifier.value
+																											}
+																										>
+																											{
+																												itemModifier.displayText
+																											}
+																										</Option>
+																									);
+																								},
+																							)}
 																						</Select>
 																					</Form.Item>
 																					<Form.Item
-																						// {...restField}
-																						name={[indexChild, 'nhu']}
+																						name={[
+																							indexChild,
+																							'managerPermission',
+																						]}
 																						className="w-[150px]"
-																						// rules={[{ required: true, message: 'Missing last name' }]}
+																						initialValue={
+																							defaultValueManager
+																						}
 																					>
-																						<Select className="w-[150px]">
-																							<Option key="1" value="1">
-																								1
-																							</Option>
-																							<Option key="2" value="2">
-																								2
-																							</Option>
-																							<Option key="3" value="3">
-																								3
-																							</Option>
+																						<Select
+																							className="w-full"
+																							defaultValue={
+																								defaultValueManager
+																							}
+																						>
+																							{managerConfig.map(
+																								(
+																									itemManger: any,
+																									indexManager: number,
+																								) => {
+																									return (
+																										<Option
+																											key={
+																												indexManager
+																											}
+																											value={
+																												itemManger.value
+																											}
+																										>
+																											{
+																												itemManger.displayText
+																											}
+																										</Option>
+																									);
+																								},
+																							)}
 																						</Select>
 																					</Form.Item>
 																				</Space>
