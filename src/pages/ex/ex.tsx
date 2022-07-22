@@ -28,93 +28,94 @@ export default function ex() {
 				<Form.List name="users">
 					{(fields, { add, remove }) => (
 						<>
-							{fields.map((field: any, index) => {
-								return dataFunction.map((item: any, index) => {
-									console.log(index);
-									return (
-										<>
-											<h1>{item.description}</h1>
-											<Space
-												key={index}
-												style={{ display: 'flex', marginBottom: 8 }}
-												align="baseline"
+							{dataFunction.map((item: any, index) => {
+								// console.log(field);
+								// return dataFunction.map((item: any, index) => {
+								// 	console.log(index);
+								return (
+									<>
+										<h1>{item.description}</h1>
+										<Space
+											key={index}
+											style={{ display: 'flex', marginBottom: 8 }}
+											align="baseline"
+										>
+											<Form.Item
+												// {...restField}
+												name={[index, 'first']}
+												className="w-[150px]"
+												// rules={[{ required: true, message: 'Missing first name' }]}
 											>
-												<Form.Item
-													// {...restField}
-													name={[index, 'first']}
-													className="w-[150px]"
-													// rules={[{ required: true, message: 'Missing first name' }]}
-												>
-													<Select className="w-full">
-														<Option key="1" value="1">
-															1
-														</Option>
-														<Option key="2" value="2">
-															2
-														</Option>
-														<Option key="3" value="3">
-															3
-														</Option>
-													</Select>
-												</Form.Item>
-												<Form.Item
-													// {...restField}
-													name={[index, 'last']}
-													className="w-[150px]"
-													// rules={[{ required: true, message: 'Missing last name' }]}
-												>
-													<Select className="w-full">
-														<Option key="1" value="1">
-															1
-														</Option>
-														<Option key="2" value="2">
-															2
-														</Option>
-														<Option key="3" value="3">
-															3
-														</Option>
-													</Select>
-												</Form.Item>
-												<Form.Item
-													// {...restField}
-													name={[index, 'hieu']}
-													className="w-[150px]"
-													// rules={[{ required: true, message: 'Missing last name' }]}
-												>
-													<Select className="w-full">
-														<Option key="1" value="1">
-															1
-														</Option>
-														<Option key="2" value="2">
-															2
-														</Option>
-														<Option key="3" value="3">
-															3
-														</Option>
-													</Select>
-												</Form.Item>
-												<Form.Item
-													// {...restField}
-													name={[index, 'nhu']}
-													className="w-[150px]"
-													// rules={[{ required: true, message: 'Missing last name' }]}
-												>
-													<Select className="w-[150px]">
-														<Option key="1" value="1">
-															1
-														</Option>
-														<Option key="2" value="2">
-															2
-														</Option>
-														<Option key="3" value="3">
-															3
-														</Option>
-													</Select>
-												</Form.Item>
-											</Space>
-										</>
-									);
-								});
+												<Select className="w-full">
+													<Option key="1" value="1">
+														1
+													</Option>
+													<Option key="2" value="2">
+														2
+													</Option>
+													<Option key="3" value="3">
+														3
+													</Option>
+												</Select>
+											</Form.Item>
+											<Form.Item
+												// {...restField}
+												name={[index, 'last']}
+												className="w-[150px]"
+												// rules={[{ required: true, message: 'Missing last name' }]}
+											>
+												<Select className="w-full">
+													<Option key="1" value="1">
+														1
+													</Option>
+													<Option key="2" value="2">
+														2
+													</Option>
+													<Option key="3" value="3">
+														3
+													</Option>
+												</Select>
+											</Form.Item>
+											<Form.Item
+												// {...restField}
+												name={[index, 'hieu']}
+												className="w-[150px]"
+												// rules={[{ required: true, message: 'Missing last name' }]}
+											>
+												<Select className="w-full">
+													<Option key="1" value="1">
+														1
+													</Option>
+													<Option key="2" value="2">
+														2
+													</Option>
+													<Option key="3" value="3">
+														3
+													</Option>
+												</Select>
+											</Form.Item>
+											<Form.Item
+												// {...restField}
+												name={[index, 'nhu']}
+												className="w-[150px]"
+												// rules={[{ required: true, message: 'Missing last name' }]}
+											>
+												<Select className="w-[150px]">
+													<Option key="1" value="1">
+														1
+													</Option>
+													<Option key="2" value="2">
+														2
+													</Option>
+													<Option key="3" value="3">
+														3
+													</Option>
+												</Select>
+											</Form.Item>
+										</Space>
+									</>
+								);
+								// });
 							})}
 						</>
 					)}
