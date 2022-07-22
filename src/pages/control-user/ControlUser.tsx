@@ -116,7 +116,7 @@ export default function ControlStaff() {
 						setUserName('');
 						showModalEdit();
 					}}
-					className="text-[blue] "
+					className="text-[blue]"
 				>
 					{record.name}
 				</div>

@@ -11,6 +11,7 @@ module.exports = {
 			'white-mini': 'rgba(255, 255, 255, 0.6)',
 			white: '#FFFFFF',
 			'border-white': '#E6E8EC',
+			'border-gray': 'E4E4E4',
 		}),
 		borderRadius: {
 			none: '0',
