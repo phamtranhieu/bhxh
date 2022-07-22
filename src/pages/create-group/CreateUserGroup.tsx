@@ -106,7 +106,7 @@ export default function CreateUserGroup() {
 				name="dynamic_form_nest_item"
 				onFinish={onFinish}
 				autoComplete="off"
-				initialValues={{ groupDataUsers: [''] }}
+				initialValues={{ groupDataUsers: [''], dataUsers: [''] }}
 			>
 				<div className="flex justify-between mb-5">
 					<h1>TẠO MỚI VAI TRÒ CỦA NGƯỜI DÙNG</h1>
@@ -143,139 +143,155 @@ export default function CreateUserGroup() {
 								{(fields, { add, remove }) => (
 									<>
 										{fields.map((field: any, index) => {
-											return dataUserGroup.map((item: any, indexDad: number) => {
+											return dataUserGroup.map((itemDad: any, indexDad: number) => {
+												console.log(itemDad);
 												return (
-													<Form.Item name={[indexDad, 'item']}>
-														<h1>{item.description}</h1>
+													<Form.Item name={[indexDad, 'id']}>
+														<h1>{itemDad.description}</h1>
 														<Form.List name="dataUsers">
 															{(fields, { add, remove }) => (
 																<>
-																	{item.features.map(
-																		(item: any, indexChild: number) => {
-																			return (
-																				<div className="flex">
-																					<p>{item.description}</p>
-																					<Space
-																						// key={indexDad}
-																						style={{
-																							display: 'flex',
-																							marginBottom: 8,
-																						}}
-																						align="baseline"
-																					>
-																						<Form.Item
-																							// {...restField}
-																							name={[indexChild, 'first']}
-																							className="w-[150px]"
-																							// rules={[{ required: true, message: 'Missing first name' }]}
+																	{fields.map((field: any, index) => {
+																		return itemDad.features.map(
+																			(item: any, indexChild: number) => {
+																				console.log(item);
+																				return (
+																					<div className="flex">
+																						<p>{item.description}</p>
+																						<Space
+																							// key={indexDad}
+																							style={{
+																								display: 'flex',
+																								marginBottom: 8,
+																							}}
+																							align="baseline"
 																						>
-																							<Select className="w-full">
-																								<Option
-																									key="1"
-																									value="1"
-																								>
-																									1
-																								</Option>
-																								<Option
-																									key="2"
-																									value="2"
-																								>
-																									2
-																								</Option>
-																								<Option
-																									key="3"
-																									value="3"
-																								>
-																									3
-																								</Option>
-																							</Select>
-																						</Form.Item>
-																						<Form.Item
-																							// {...restField}
-																							name={[indexChild, 'last']}
-																							className="w-[150px]"
-																							// rules={[{ required: true, message: 'Missing last name' }]}
-																						>
-																							<Select className="w-full">
-																								<Option
-																									key="1"
-																									value="1"
-																								>
-																									1
-																								</Option>
-																								<Option
-																									key="2"
-																									value="2"
-																								>
-																									2
-																								</Option>
-																								<Option
-																									key="3"
-																									value="3"
-																								>
-																									3
-																								</Option>
-																							</Select>
-																						</Form.Item>
-																						<Form.Item
-																							// {...restField}
-																							name={[indexChild, 'hieu']}
-																							className="w-[150px]"
-																							// rules={[{ required: true, message: 'Missing last name' }]}
-																						>
-																							<Select className="w-full">
-																								<Option
-																									key="1"
-																									value="1"
-																								>
-																									1
-																								</Option>
-																								<Option
-																									key="2"
-																									value="2"
-																								>
-																									2
-																								</Option>
-																								<Option
-																									key="3"
-																									value="3"
-																								>
-																									3
-																								</Option>
-																							</Select>
-																						</Form.Item>
-																						<Form.Item
-																							// {...restField}
-																							name={[indexChild, 'nhu']}
-																							className="w-[150px]"
-																							// rules={[{ required: true, message: 'Missing last name' }]}
-																						>
-																							<Select className="w-[150px]">
-																								<Option
-																									key="1"
-																									value="1"
-																								>
-																									1
-																								</Option>
-																								<Option
-																									key="2"
-																									value="2"
-																								>
-																									2
-																								</Option>
-																								<Option
-																									key="3"
-																									value="3"
-																								>
-																									3
-																								</Option>
-																							</Select>
-																						</Form.Item>
-																					</Space>
-																				</div>
-																			);
-																		},
-																	)}
+																							<Form.Item
+																								// {...restField}
+																								name={[
+																									indexChild,
+																									'first',
+																								]}
+																								className="w-[150px]"
+																								// rules={[{ required: true, message: 'Missing first name' }]}
+																							>
+																								<Select className="w-full">
+																									<Option
+																										key="1"
+																										value="1"
+																									>
+																										1
+																									</Option>
+																									<Option
+																										key="2"
+																										value="2"
+																									>
+																										2
+																									</Option>
+																									<Option
+																										key="3"
+																										value="3"
+																									>
+																										3
+																									</Option>
+																								</Select>
+																							</Form.Item>
+																							<Form.Item
+																								// {...restField}
+																								name={[
+																									indexChild,
+																									'last',
+																								]}
+																								className="w-[150px]"
+																								// rules={[{ required: true, message: 'Missing last name' }]}
+																							>
+																								<Select className="w-full">
+																									<Option
+																										key="1"
+																										value="1"
+																									>
+																										1
+																									</Option>
+																									<Option
+																										key="2"
+																										value="2"
+																									>
+																										2
+																									</Option>
+																									<Option
+																										key="3"
+																										value="3"
+																									>
+																										3
+																									</Option>
+																								</Select>
+																							</Form.Item>
+																							<Form.Item
+																								// {...restField}
+																								name={[
+																									indexChild,
+																									'hieu',
+																								]}
+																								className="w-[150px]"
+																								// rules={[{ required: true, message: 'Missing last name' }]}
+																							>
+																								<Select className="w-full">
+																									<Option
+																										key="1"
+																										value="1"
+																									>
+																										1
+																									</Option>
+																									<Option
+																										key="2"
+																										value="2"
+																									>
+																										2
+																									</Option>
+																									<Option
+																										key="3"
+																										value="3"
+																									>
+																										3
+																									</Option>
+																								</Select>
+																							</Form.Item>
+																							<Form.Item
+																								// {...restField}
+																								name={[
+																									indexChild,
+																									'nhu',
+																								]}
+																								className="w-[150px]"
+																								// rules={[{ required: true, message: 'Missing last name' }]}
+																							>
+																								<Select className="w-[150px]">
+																									<Option
+																										key="1"
+																										value="1"
+																									>
+																										1
+																									</Option>
+																									<Option
+																										key="2"
+																										value="2"
+																									>
+																										2
+																									</Option>
+																									<Option
+																										key="3"
+																										value="3"
+																									>
+																										3
+																									</Option>
+																								</Select>
+																							</Form.Item>
+																						</Space>
+																					</div>
+																				);
+																			},
+																		);
+																	})}
 																</>
 															)}
 														</Form.List>
