@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, Checkbox, Select, Space, message } from 'antd';
 import {
 	getAllFunctionGroupUser,
@@ -8,15 +8,12 @@ import {
 	getDataConfigGroup,
 	createGroupUser,
 } from '../../service/group/GroupUserService';
-import { DisabledContextProvider } from 'antd/lib/config-provider/DisabledContext';
 import { GroupItemType, ItemChildType, ItemConfig } from '../../interface/group/UserGroupType';
 import { titleFunction } from '../../service/group/DataUserService';
-import { EditOutlined, MinusCircleOutlined, PlusOutlined, DislikeOutlined } from '@ant-design/icons';
-import { MessageConstantSuccess, MessageConstantError } from '../../constant/auth/auth.constant';
 
-export default function CreateUserGroup() {
+export default function DetailUserGroup() {
 	const { Option } = Select;
-	const [formCreate] = Form.useForm();
+	const [formUpdate] = Form.useForm();
 	const [dataUserGroup, setDataUserGroup] = useState([]);
 	const [dataConfig, setDataConfig] = useState([]);
 	const [createConfig, setCreateConfig] = useState([]);
@@ -24,6 +21,12 @@ export default function CreateUserGroup() {
 	const [managerConfig, setManagerConfig] = useState([]);
 	const [valueChecked, setValueChecked] = useState<boolean>(false);
 
+	const handleChecked = (e: any) => {
+		setValueChecked(e.target.checked);
+	};
+	const onFinish = (values: any) => {
+		console.log(values);
+	};
 	useEffect(() => {
 		getAllFunctionGroupUser()
 			.then(res => {
@@ -66,34 +69,6 @@ export default function CreateUserGroup() {
 				console.log(err);
 			});
 	}, []);
-	const onFinish = (values: any) => {
-		values.isAdmin = valueChecked;
-		values.modules.map((item: any, index: number) => {
-			return item.features.map((itemX: any, indexX: number) => {
-				itemX.createPermission = { value: itemX.createPermission };
-				itemX.dataPermission = { value: itemX.dataPermission };
-				itemX.managerPermission = { value: itemX.managerPermission };
-				itemX.modifierPermission = { value: itemX.modifierPermission };
-			});
-		});
-		createGroupUser(values)
-			.then((res: any) => {
-				console.log(res);
-				message.success(MessageConstantSuccess.createGroupUserSuccess);
-			})
-			.catch((err: any) => {
-				console.log(err);
-				message.error(MessageConstantError.createGroupUserError);
-			});
-	};
-
-	const onFinished = (values: any) => {
-		console.log('Success:', values);
-	};
-
-	const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo);
-	};
 
 	const defaultData = dataConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
@@ -110,17 +85,6 @@ export default function CreateUserGroup() {
 	const defaultManager = managerConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
 	})[1]?.value;
-
-	const handleChecked = (e: any) => {
-		setValueChecked(e.target.checked);
-	};
-	const handleDelete = (e: any) => {
-		setValueChecked(false);
-		formCreate.setFieldsValue({
-			name: '',
-		});
-	};
-
 	return (
 		<div>
 			<Form
@@ -130,14 +94,18 @@ export default function CreateUserGroup() {
 				onFinish={onFinish}
 				autoComplete="off"
 				initialValues={{ modules: [''], features: [''] }}
-				form={formCreate}
+				form={formUpdate}
 			>
 				<div className="flex justify-between mb-5">
-					<h1>TẠO MỚI VAI TRÒ CỦA NGƯỜI DÙNG</h1>
+					<h1>CHI TIẾT VAI TRÒ CỦA NGƯỜI DÙNG</h1>
 					<div>
-						<Button onClick={handleDelete}>Hủy thao tác</Button>
+						<Button
+						// onClick={handleDelete}
+						>
+							Trở về
+						</Button>
 						<Button className="ml-5" type="primary" htmlType="submit">
-							Lưu thông tin
+							Chỉnh sửa
 						</Button>
 					</div>
 				</div>

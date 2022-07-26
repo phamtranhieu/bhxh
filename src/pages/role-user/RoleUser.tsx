@@ -23,7 +23,7 @@ interface DataType {
 	roleUser: any;
 	numberUser: any;
 	action: any;
-	// record: any;
+	idUser: string;
 }
 
 export default function RoleUser() {
@@ -53,6 +53,7 @@ export default function RoleUser() {
 			roleUser: item.name,
 			numberUser: item.userNumber + ' người dùng',
 			action: '',
+			idUser: item.id,
 		};
 	});
 
@@ -86,9 +87,15 @@ export default function RoleUser() {
 			title: 'Thao tác',
 			key: 'action',
 			dataIndex: 'action',
-			render: () => (
+			render: (_, record) => (
 				<div className="flex">
-					<EyeOutlined className="mr-5" />
+					<EyeOutlined
+						className="mr-5"
+						onClick={() => {
+							console.log(record);
+							navigate(`/home/detail-group-user?id=${record.idUser}`);
+						}}
+					/>
 					<DeleteOutlined />
 				</div>
 			),

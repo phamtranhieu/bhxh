@@ -10,6 +10,8 @@ export const MessageConstantError = {
 	createUserUnsuccess: 'Tạo mới tài khoản người dùng thất bại',
 	updateUserUnsuccess: 'Cập nhật tài khoản người dùng thất bại',
 	changePassUnsuccess: 'Bạn đổi mật khẩu thất bại',
+
+	createGroupUserError: 'Tạo mới nhóm người dùng thất bại',
 };
 export const MessageConstantSuccess = {
 	loginSuccess: 'Đăng nhập thành công !',
@@ -18,4 +20,6 @@ export const MessageConstantSuccess = {
 	updateStatusSuccess: 'Bạn đã cập nhật trạng thái thành công',
 	createUserSuccess: 'Tạo mới tài khoản người dùng thành công',
 	updateUserSuccess: 'Cập nhật tài khoản người dùng thành công',
+
+	createGroupUserSuccess: 'Tạo mới nhóm người dùng thành công',
 };
