@@ -7,6 +7,7 @@ import {
 	getModifierConfigGroup,
 	getDataConfigGroup,
 	createGroupUser,
+	getDetailGroupUser,
 } from '../../service/group/GroupUserService';
 import { GroupItemType, ItemChildType, ItemConfig } from '../../interface/group/UserGroupType';
 import { titleFunction } from '../../service/group/DataUserService';
@@ -24,7 +25,9 @@ export default function DetailUserGroup() {
 	const handleChecked = (e: any) => {
 		setValueChecked(e.target.checked);
 	};
+	console.log(valueChecked);
 	const onFinish = (values: any) => {
+		values.isAdmin = valueChecked;
 		console.log(values);
 	};
 	useEffect(() => {
@@ -85,6 +88,7 @@ export default function DetailUserGroup() {
 	const defaultManager = managerConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
 	})[1]?.value;
+
 	return (
 		<div>
 			<Form
@@ -99,11 +103,7 @@ export default function DetailUserGroup() {
 				<div className="flex justify-between mb-5">
 					<h1>CHI TIẾT VAI TRÒ CỦA NGƯỜI DÙNG</h1>
 					<div>
-						<Button
-						// onClick={handleDelete}
-						>
-							Trở về
-						</Button>
+						<Button>Trở về</Button>
 						<Button className="ml-5" type="primary" htmlType="submit">
 							Chỉnh sửa
 						</Button>

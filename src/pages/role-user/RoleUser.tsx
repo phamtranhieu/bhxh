@@ -9,6 +9,7 @@ import {
 	getAllGroupUser,
 	paginationGroupUser,
 	updateGroupUser,
+	getDetailGroupUser,
 } from '../../service/group/GroupUserService';
 import {
 	EditOutlined,
@@ -29,25 +30,39 @@ interface DataType {
 export default function RoleUser() {
 	const [pageNumberRole, setPageNumber] = useState<number>(0);
 	const [pageSizeRole, setPageSize] = useState<number>(6);
-	const [dataGroupUser, setDataGroupUser] = useState([]);
+	const [dataGroupUser, setDataGroupUser] = useState({
+		items: [],
+		total: 0,
+	});
+	const [idUser, setIDUser] = useState('');
 	const typingTimeoutRef = useRef(null);
 	const [filterSearch, setFilterSearch] = useState('');
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [objParams, setObjParams] = useState({});
-
+	console.log(objParams);
 	const navigate = useNavigate();
 	useEffect(() => {
 		paginationGroupUser(pageNumberRole, pageSizeRole, objParams)
 			.then(res => {
 				console.log(res);
-				setDataGroupUser(res.data.data.items);
+				setDataGroupUser({
+					items: res.data.data.items,
+					total: res.data.data.totalCount,
+				});
+				// setDataGroupUser(res.data.data.items);
 			})
 			.catch(err => {
 				console.log(err);
 			});
 	}, [pageNumberRole, pageSizeRole, objParams]);
 
-	const dataShow: DataType[] = dataGroupUser.map((item: any, index: number) => {
+	const handleGetId = (record: any) => {
+		console.log(record.idUser);
+		// setSearchParams({ idUser: record.idUser });
+		navigate(`/home/detail-user?idUser=${record.idUser}`);
+	};
+	console.log(dataGroupUser.items);
+	const dataShow: DataType[] = dataGroupUser.items.map((item: any, index: number) => {
 		return {
 			key: index + 1,
 			roleUser: item.name,
@@ -71,6 +86,8 @@ export default function RoleUser() {
 				<div
 					onClick={() => {
 						console.log(record);
+						// setIDUser(record.idUser);
+						handleGetId(record);
 					}}
 					className="text-[blue]"
 				>
@@ -96,16 +113,47 @@ export default function RoleUser() {
 							navigate(`/home/detail-group-user?id=${record.idUser}`);
 						}}
 					/>
-					<DeleteOutlined />
+					<DeleteOutlined
+						onClick={() => {
+							console.log(record);
+							// navigate(`/home/detail-group-user?id=${record.idUser}`);
+							handleDeleteUserGroup(record);
+						}}
+					/>
 				</div>
 			),
 		},
 	];
+	const handleDeleteUserGroup = (record: any) => {
+		const paramsDelete = {
+			id: record.idUser,
+		};
+		console.log(paramsDelete);
+		deleteGroupUser(paramsDelete)
+			.then(res => {
+				console.log(res);
+			})
+			.catch(err => {
+				console.log(err);
+			});
 
+		// paginationGroupUser(pageNumberRole, pageSizeRole, objParams)
+		// 	.then(res => {
+		// 		console.log(res);
+		// 		setDataGroupUser({
+		// 			items: res.data.data.items,
+		// 			total: res.data.data.totalCount,
+		// 		});
+		// 	})
+		// 	.catch(err => {
+		// 		console.log(err);
+		// 	});
+	};
 	const onChange: PaginationProps['onChange'] = (pageNumber, pageSize) => {
-		setPageNumber(pageNumber);
+		setPageNumber(pageNumber - 1);
 		setPageSize(pageSize);
 	};
+
 	const handleChange = (e: any) => {
 		console.log(e.target.value);
 		if (typingTimeoutRef.current) {
@@ -126,6 +174,7 @@ export default function RoleUser() {
 			searchKey: e.target.value,
 		});
 	};
+
 	const handleAdd = () => {
 		navigate('/home/create-group-user');
 	};
@@ -143,7 +192,7 @@ export default function RoleUser() {
 			<div className="flex justify-end mt-5">
 				<Pagination
 					defaultCurrent={1}
-					total={dataGroupUser.length}
+					total={dataGroupUser.total}
 					showSizeChanger
 					onChange={onChange}
 					defaultPageSize={6}

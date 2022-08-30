@@ -1,5 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Checkbox, Select, Space, message } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import {
+	EditOutlined,
+	KeyOutlined,
+	LikeOutlined,
+	DislikeOutlined,
+	EyeOutlined,
+	DeleteOutlined,
+} from '@ant-design/icons';
 import {
 	getAllFunctionGroupUser,
 	getCreateConfigGroup,
@@ -7,38 +16,40 @@ import {
 	getModifierConfigGroup,
 	getDataConfigGroup,
 	createGroupUser,
+	getDetailGroupUser,
+	updateGroupUser,
 } from '../../service/group/GroupUserService';
-import { DisabledContextProvider } from 'antd/lib/config-provider/DisabledContext';
 import { GroupItemType, ItemChildType, ItemConfig } from '../../interface/group/UserGroupType';
-import { titleFunction } from '../../service/group/DataUserService';
-import { EditOutlined, MinusCircleOutlined, PlusOutlined, DislikeOutlined } from '@ant-design/icons';
-import { MessageConstantSuccess, MessageConstantError } from '../../constant/auth/auth.constant';
-import { useNavigate } from 'react-router-dom';
 
-export default function CreateUserGroup() {
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { titleFunction } from '../../service/group/DataUserService';
+
+interface DataType {
+	key: number;
+	roleUser: any;
+	numberUser: any;
+	action: any;
+	idUser: string;
+}
+
+export default function DetailUser() {
+	const navigate = useNavigate();
 	const { Option } = Select;
-	const [formCreate] = Form.useForm();
+	const [formIdUser] = Form.useForm();
+	const [valueChecked, setValueChecked] = useState<boolean>(false);
+	const [searchParams, setSearchParams] = useSearchParams();
 	const [dataUserGroup, setDataUserGroup] = useState([]);
 	const [dataConfig, setDataConfig] = useState([]);
 	const [createConfig, setCreateConfig] = useState([]);
 	const [modifierConfig, setModifierConfig] = useState([]);
 	const [managerConfig, setManagerConfig] = useState([]);
-	const [valueChecked, setValueChecked] = useState<boolean>(false);
-
-	const navigate = useNavigate();
-
+	const [dataUserGroupID, setDataUserGroupID] = useState<any>();
+	const paramsIdUser = searchParams.get('idUser');
+	console.log('dataConfig', dataConfig);
 	useEffect(() => {
-		getAllFunctionGroupUser()
-			.then(res => {
-				console.log(res);
-				setDataUserGroup(res.data.data);
-			})
-			.catch(err => {
-				console.log(err);
-			});
 		getDataConfigGroup()
 			.then(res => {
-				console.log(res);
+				console.log('response', res);
 				setDataConfig(res.data.data);
 			})
 			.catch(err => {
@@ -68,40 +79,23 @@ export default function CreateUserGroup() {
 			.catch(err => {
 				console.log(err);
 			});
-	}, []);
-	const onFinish = (values: any) => {
-		console.log(values);
-		values.isAdmin = valueChecked;
-		values.modules.map((item: any, index: number) => {
-			return item.features.map((itemX: any, indexX: number) => {
-				itemX.createPermission = { value: itemX.createPermission };
-				itemX.dataPermission = { value: itemX.dataPermission };
-				itemX.managerPermission = { value: itemX.managerPermission };
-				itemX.modifierPermission = { value: itemX.modifierPermission };
-			});
-		});
-		console.log(values);
-		// return;
-		createGroupUser(values)
-			.then((res: any) => {
+		getDetailGroupUser(paramsIdUser!)
+			.then(res => {
 				console.log(res);
-				message.success(MessageConstantSuccess.createGroupUserSuccess);
-				formCreate.setFieldsValue({ name: '' });
-				navigate('/home/role-user');
+				setDataUserGroupID(res.data.data);
 			})
-			.catch((err: any) => {
+			.catch(err => {
 				console.log(err);
-				message.error(MessageConstantError.createGroupUserError);
 			});
-	};
+	}, []);
 
-	const onFinished = (values: any) => {
-		console.log('Success:', values);
-	};
-
-	const onFinishFailed = (errorInfo: any) => {
-		console.log('Failed:', errorInfo);
-	};
+	if (dataUserGroupID) {
+		formIdUser.setFieldsValue({
+			name: dataUserGroupID.name,
+			isAdmin: dataUserGroupID.isAdmin,
+			modules: dataUserGroupID.modules,
+		});
+	}
 
 	const defaultData = dataConfig.map((item: ItemConfig) => {
 		return { display: item.displayText, value: item.value };
@@ -119,16 +113,58 @@ export default function CreateUserGroup() {
 		return { display: item.displayText, value: item.value };
 	})[1]?.value;
 
+	const onFinish = (values: any) => {
+		console.log('values', values);
+
+		const arrayModules = values.modules.map((item: any, index: number) => {
+			return {
+				...item,
+				features: item.features.map((itemChild: any, indexChild: number) => {
+					return {
+						...itemChild,
+						createPermission:
+							typeof itemChild.createPermission === 'string'
+								? JSON.parse(itemChild.createPermission)
+								: itemChild.createPermission,
+						dataPermission:
+							typeof itemChild.createPermission === 'string'
+								? JSON.parse(itemChild.createPermission)
+								: itemChild.createPermission,
+						managerPermission:
+							typeof itemChild.createPermission === 'string'
+								? JSON.parse(itemChild.createPermission)
+								: itemChild.createPermission,
+						modifierPermission:
+							typeof itemChild.createPermission === 'string'
+								? JSON.parse(itemChild.createPermission)
+								: itemChild.createPermission,
+					};
+				}),
+			};
+		});
+		const paramsSend = {
+			...values,
+			id: paramsIdUser,
+			modules: arrayModules,
+		};
+
+		updateGroupUser(paramsSend)
+			.then(res => {
+				console.log(res);
+				message.success('Bạn đã thay đổi thông tin nhóm người dùng thành công');
+				formIdUser.resetFields();
+				navigate('/home');
+			})
+			.catch(err => {
+				console.log(err);
+			});
+	};
 	const handleChecked = (e: any) => {
 		setValueChecked(e.target.checked);
 	};
-	const handleDelete = (e: any) => {
-		setValueChecked(false);
-		formCreate.setFieldsValue({
-			name: '',
-		});
+	const handleChange = (e: any) => {
+		console.log(e);
 	};
-
 	return (
 		<div>
 			<Form
@@ -138,14 +174,14 @@ export default function CreateUserGroup() {
 				onFinish={onFinish}
 				autoComplete="off"
 				initialValues={{ modules: [''], features: [''] }}
-				form={formCreate}
+				form={formIdUser}
 			>
 				<div className="flex justify-between mb-5">
-					<h1>TẠO MỚI VAI TRÒ CỦA NGƯỜI DÙNG</h1>
+					<h1>CHI TIẾT VAI TRÒ CỦA NGƯỜI DÙNG</h1>
 					<div>
-						<Button onClick={handleDelete}>Hủy thao tác</Button>
+						<Button>Trở về</Button>
 						<Button className="ml-5" type="primary" htmlType="submit">
-							Lưu thông tin
+							Chỉnh sửa
 						</Button>
 					</div>
 				</div>
@@ -176,7 +212,7 @@ export default function CreateUserGroup() {
 							<Form.List name="modules">
 								{(fields, { add, remove }) => (
 									<>
-										{dataUserGroup.map((itemDad: any, indexDad) => {
+										{dataUserGroupID?.modules.map((itemDad: any, indexDad: any) => {
 											return (
 												<>
 													<div className="hidden">
@@ -288,6 +324,9 @@ export default function CreateUserGroup() {
 																									defaultData
 																								}
 																								disabled={valueChecked}
+																								onChange={(e: any) => {
+																									handleChange(e);
+																								}}
 																							>
 																								{dataConfig.map(
 																									(
@@ -299,9 +338,9 @@ export default function CreateUserGroup() {
 																												key={
 																													indexData
 																												}
-																												value={
-																													itemData.value
-																												}
+																												value={JSON.stringify(
+																													itemData,
+																												)}
 																											>
 																												{
 																													itemData.displayText
@@ -337,9 +376,9 @@ export default function CreateUserGroup() {
 																												key={
 																													indexCreate
 																												}
-																												value={
-																													itemCreate.value
-																												}
+																												value={JSON.stringify(
+																													itemCreate,
+																												)}
 																											>
 																												{
 																													itemCreate.displayText
@@ -377,9 +416,9 @@ export default function CreateUserGroup() {
 																												key={
 																													indexModifier
 																												}
-																												value={
-																													itemModifier.value
-																												}
+																												value={JSON.stringify(
+																													itemModifier,
+																												)}
 																											>
 																												{
 																													itemModifier.displayText
@@ -417,9 +456,9 @@ export default function CreateUserGroup() {
 																												key={
 																													indexManager
 																												}
-																												value={
-																													itemManger.value
-																												}
+																												value={JSON.stringify(
+																													itemManger,
+																												)}
 																											>
 																												{
 																													itemManger.displayText

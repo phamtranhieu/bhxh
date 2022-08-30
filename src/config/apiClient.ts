@@ -14,6 +14,7 @@ const apiClient = axios.create({
 	baseURL: `${configApp.hostApi}/${configApp.apiPrefix}/`,
 	headers: {
 		'content-type': 'application/json',
+		// 'content-type': 'application/json-patch+json',
 	},
 });
 

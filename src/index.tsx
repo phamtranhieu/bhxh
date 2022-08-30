@@ -15,6 +15,7 @@ import ControlUser from './pages/control-user/ControlUser';
 import RoleUser from './pages/role-user/RoleUser';
 import CreateUserGroup from './pages/create-group/CreateUserGroup';
 import DetailUserGroup from './pages/detailUserGroup/DetailUserGroup';
+import DetailUser from './pages/detail-user/DetailUser';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -29,6 +30,7 @@ root.render(
 						<Route path="role-user" element={<RoleUser />} />
 						<Route path="create-group-user" element={<CreateUserGroup />} />
 						<Route path="detail-group-user" element={<DetailUserGroup />} />
+						<Route path="detail-user" element={<DetailUser />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

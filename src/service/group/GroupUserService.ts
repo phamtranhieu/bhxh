@@ -3,6 +3,7 @@ var qs = require('querystringify');
 
 export const paginationGroupUser = async (pageNumber: any, pageSize: any, objParams: any) => {
 	let objParamUrls = qs.stringify(objParams);
+	console.log(objParams);
 	return await apiClient.get(`/user-group/filter/${pageNumber}/${pageSize}?${objParamUrls}`);
 };
 
@@ -35,9 +36,15 @@ export const createGroupUser = async (params: any) => {
 };
 
 export const updateGroupUser = async (params: any) => {
+	console.log('params123456', params);
 	return await apiClient.put(`/user-group/update`, params);
 };
 
 export const deleteGroupUser = async (params: any) => {
+	console.log('params123', params);
 	return await apiClient.delete(`/user-group/delete`, params);
+};
+
+export const getDetailGroupUser = async (params: string) => {
+	return await apiClient.get(`/user-group/${params}`);
 };
